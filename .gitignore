@@ -1,0 +1,18 @@
+# Build output
+_site/
+examples/hydra-client/dist/
+vocab/dist/
+
+# Dependencies
+node_modules/
+
+# Eleventy cache
+.cache/
+
+# Local Claude Code config (machine-specific; not for the public repo)
+.claude/settings.local.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log

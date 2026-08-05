@@ -1,0 +1,38 @@
+{
+  "name": "hydra-client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A generic Hydra/JSON-LD client. Everything it knows about an API it learns at runtime from documents that API publishes.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "report": "vite-node tools/conformance-report.ts",
+    "mcp": "vite-node mcp/index.ts"
+  },
+  "devDependencies": {
+    "@rdfjs/types": "^2.0.1",
+    "@types/jsonld": "^1.5.15",
+    "@types/n3": "^1.26.1",
+    "@types/node": "^26.1.2",
+    "@types/sparqljs": "^3.1.12",
+    "jsdom": "^30.0.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5",
+    "vite-node": "^6.0.0",
+    "vitest": "^4.1.10"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
+    "@comunica/query-sparql-rdfjs": "^5.3.0",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "dompurify": "^3.4.13",
+    "jsonld": "^9.0.0",
+    "marked": "^18.0.9",
+    "n3": "^2.1.1",
+    "sparqljs": "^3.7.4"
+  }
+}

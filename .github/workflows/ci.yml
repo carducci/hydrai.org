@@ -1,0 +1,50 @@
+name: CI
+
+# Build the whole site and run the reference client's full test suite on every push and PR.
+# The vocabulary, the agent bundle, and the site are all built here, so a change that breaks any of
+# them fails the check — the rigor is visible on the public repo, not just on a laptop.
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install (workspaces)
+        run: npm ci
+
+      - name: Build the whole site (agent + vocabulary + Eleventy)
+        run: npm run build
+
+      - name: Vocabulary — parse, validate, purity + Hydra bijection
+        run: npm run test:vocab
+
+      - name: Reference client — full test suite
+        # Live tests (HYDRA_LIVE / ANTHROPIC_API_KEY) self-skip without credentials; everything else
+        # runs offline, so this is the real conformance gate.
+        run: npm test --workspace hydra-client
+
+      - name: Upload built site
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site
+          if-no-files-found: warn

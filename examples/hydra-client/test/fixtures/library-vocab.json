@@ -1,0 +1,323 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/hydra/context.jsonld",
+    { "lend": "https://lending.example/ns#" }
+  ],
+  "@id": "https://lending.example/api/vocab",
+  "@type": "ApiDocumentation",
+  "title": "Lending API",
+  "description": "A lending API that does not exist. Its collections and their member classes share no word stem, and one collection has a near-homograph decoy class, so any client deriving relationships from spelling gets a confidently wrong answer rather than no answer.",
+  "supportedClass": [
+    {
+      "@id": "lend:Tome",
+      "@type": "Class",
+      "title": "Tome",
+      "description": "A book held by the library.",
+      "supportedOperation": [
+        {
+          "@type": "Operation",
+          "title": "Retrieve a tome",
+          "method": "GET",
+          "returns": "lend:Tome"
+        },
+        {
+          "@type": "Operation",
+          "title": "Replace a tome",
+          "description": "Replaces the entire tome. Every writeable property not supplied is cleared, so read the current representation first and send it back in full with your changes applied.",
+          "method": "PUT",
+          "expects": "lend:Tome",
+          "returns": "lend:Tome"
+        },
+        {
+          "@type": "Operation",
+          "title": "Withdraw a tome",
+          "method": "DELETE"
+        }
+      ],
+      "supportedProperty": [
+        {
+          "@type": "SupportedProperty",
+          "property": "lend:heading",
+          "title": "heading",
+          "description": "The title under which the tome is catalogued.",
+          "readable": true,
+          "writeable": true,
+          "required": true
+        },
+        {
+          "@type": "SupportedProperty",
+          "property": "lend:isbn",
+          "title": "isbn",
+          "readable": true,
+          "writeable": true,
+          "required": false
+        },
+        {
+          "@type": "SupportedProperty",
+          "property": { "@id": "lend:shelvedOn", "@type": "Link" },
+          "title": "shelvedOn",
+          "description": "The shelving unit this tome physically sits on.",
+          "readable": true,
+          "writeable": true,
+          "required": false,
+          "range": "lend:Stack"
+        }
+      ]
+    },
+
+    {
+      "@id": "lend:Stacks",
+      "@type": "Class",
+      "title": "Stacks",
+      "description": "The collection of every tome the library holds.",
+      "supportedOperation": [
+        {
+          "@type": "Operation",
+          "title": "Retrieve the stacks",
+          "method": "GET",
+          "returns": "lend:Stacks"
+        },
+        {
+          "@type": "Operation",
+          "title": "Accession a tome",
+          "method": "POST",
+          "expects": "lend:Tome",
+          "returns": "lend:Tome",
+          "possibleStatus": [
+            {
+              "@type": "Status",
+              "statusCode": 201,
+              "description": "The tome was accessioned."
+            },
+            {
+              "@type": "Status",
+              "statusCode": 409,
+              "description": "A tome with that ISBN is already accessioned."
+            }
+          ]
+        }
+      ],
+      "supportedProperty": [
+        {
+          "@type": "SupportedProperty",
+          "property": "hydra:member",
+          "range": "lend:Tome",
+          "title": "member",
+          "description": "A tome belonging to the stacks.",
+          "readable": true,
+          "writeable": false,
+          "required": false
+        }
+      ],
+      "search": [
+        {
+          "@type": "IriTemplate",
+          "template": "https://lending.example/api/stacks/leaf/{leaf}",
+          "label": "Page through the stacks",
+          "mapping": [
+            {
+              "@type": "IriTemplateMapping",
+              "variable": "leaf",
+              "property": "hydra:pageIndex",
+              "required": true,
+              "comment": "1-based page number."
+            }
+          ]
+        },
+        {
+          "@type": "IriTemplate",
+          "template": "https://lending.example/api/stacks{?anything,heading,isbn}",
+          "label": "Search the stacks",
+          "mapping": [
+            {
+              "@type": "IriTemplateMapping",
+              "variable": "anything",
+              "property": "hydra:freetextQuery",
+              "required": false,
+              "comment": "Relevance-ranked free text."
+            },
+            {
+              "@type": "IriTemplateMapping",
+              "variable": "heading",
+              "property": "lend:heading",
+              "required": false
+            },
+            {
+              "@type": "IriTemplateMapping",
+              "variable": "isbn",
+              "property": "lend:isbn",
+              "required": false
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "@id": "lend:Stack",
+      "@type": "Class",
+      "title": "Stack",
+      "description": "A physical shelving unit. THE DECOY: a client that singularises the collection name 'Stacks' lands here, which is a real class with real operations, so the mistake does not fail loudly — it silently reads the wrong type.",
+      "supportedOperation": [
+        {
+          "@type": "Operation",
+          "title": "Retrieve a shelving unit",
+          "method": "GET",
+          "returns": "lend:Stack"
+        }
+      ],
+      "supportedProperty": [
+        {
+          "@type": "SupportedProperty",
+          "property": "lend:aisle",
+          "title": "aisle",
+          "readable": true,
+          "writeable": false,
+          "required": false
+        }
+      ]
+    },
+
+    {
+      "@id": "lend:Patron",
+      "@type": "Class",
+      "title": "Patron",
+      "description": "Someone entitled to borrow.",
+      "supportedOperation": [
+        { "@type": "Operation", "title": "Retrieve a patron", "method": "GET", "returns": "lend:Patron" },
+        {
+          "@type": "Operation",
+          "title": "Replace a patron",
+          "method": "PUT",
+          "expects": "lend:Patron",
+          "returns": "lend:Patron"
+        }
+      ],
+      "supportedProperty": [
+        {
+          "@type": "SupportedProperty",
+          "property": "lend:known_as",
+          "title": "known_as",
+          "readable": true,
+          "writeable": true,
+          "required": true
+        }
+      ]
+    },
+
+    {
+      "@id": "lend:Roster",
+      "@type": "Class",
+      "title": "Roster",
+      "description": "Everyone entitled to borrow.",
+      "supportedOperation": [
+        { "@type": "Operation", "title": "Retrieve the roster", "method": "GET", "returns": "lend:Roster" },
+        {
+          "@type": "Operation",
+          "title": "Enrol a patron",
+          "method": "POST",
+          "expects": "lend:Patron",
+          "returns": "lend:Patron"
+        }
+      ],
+      "supportedProperty": [
+        {
+          "@type": "SupportedProperty",
+          "property": "hydra:member",
+          "range": "lend:Patron",
+          "title": "member",
+          "readable": true,
+          "writeable": false,
+          "required": false
+        }
+      ]
+    },
+
+    {
+      "@id": "lend:Loan",
+      "@type": "Class",
+      "title": "Loan",
+      "description": "A tome, out with a patron.",
+      "supportedOperation": [
+        { "@type": "Operation", "title": "Retrieve a loan", "method": "GET", "returns": "lend:Loan" },
+        {
+          "@type": "Operation",
+          "title": "Replace a loan",
+          "method": "PUT",
+          "expects": "lend:Loan",
+          "returns": "lend:Loan",
+          "possibleStatus": [
+            {
+              "@type": "Status",
+              "statusCode": 402,
+              "description": "Outstanding fines must be settled before this loan can be altered."
+            },
+            {
+              "@type": "Status",
+              "statusCode": 423,
+              "description": "The tome is reserved by another patron and the loan is frozen."
+            }
+          ]
+        },
+        { "@type": "Operation", "title": "Discharge a loan", "method": "DELETE" }
+      ],
+      "supportedProperty": [
+        {
+          "@type": "SupportedProperty",
+          "property": { "@id": "lend:borrower", "@type": "Link" },
+          "title": "borrower",
+          "description": "The patron holding the tome.",
+          "readable": true,
+          "writeable": true,
+          "required": true,
+          "range": "lend:Patron"
+        },
+        {
+          "@type": "SupportedProperty",
+          "property": { "@id": "lend:guarantor", "@type": "Link" },
+          "title": "guarantor",
+          "description": "A second patron underwriting the loan. Reference by node {'@id','@type','known_as'}. DELIBERATE GAP: this is a Link with no declared range, so a reference cannot be resolved deterministically. The client must escalate rather than omit the field.",
+          "readable": true,
+          "writeable": true,
+          "required": false
+        },
+        {
+          "@type": "SupportedProperty",
+          "property": "lend:dueOn",
+          "title": "dueOn",
+          "readable": true,
+          "writeable": true,
+          "required": true
+        }
+      ]
+    },
+
+    {
+      "@id": "lend:Ledger",
+      "@type": "Class",
+      "title": "Ledger",
+      "description": "Every loan, open and discharged.",
+      "supportedOperation": [
+        { "@type": "Operation", "title": "Retrieve the ledger", "method": "GET", "returns": "lend:Ledger" },
+        {
+          "@type": "Operation",
+          "title": "Issue a loan",
+          "method": "POST",
+          "expects": "lend:Loan",
+          "returns": "lend:Loan"
+        }
+      ],
+      "supportedProperty": [
+        {
+          "@type": "SupportedProperty",
+          "property": "hydra:member",
+          "range": "lend:Loan",
+          "title": "member",
+          "readable": true,
+          "writeable": false,
+          "required": false
+        }
+      ]
+    }
+  ]
+}

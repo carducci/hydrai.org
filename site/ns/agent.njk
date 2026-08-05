@@ -1,0 +1,12 @@
+---
+layout: base.njk
+permalink: /ns/agent/index.html
+bodyClass: vocab
+title: "agent# — the HydrAI vocabulary"
+description: The HydrAI agent# vocabulary — the agentic terms Hydra core cannot express, published in HTML, Turtle, and JSON-LD.
+alternates:
+  - { type: "text/turtle", href: "/ns/agent.ttl", title: "Turtle" }
+  - { type: "application/ld+json", href: "/ns/agent.jsonld", title: "JSON-LD" }
+---
+{% set v = vocab.agent %}
+{% include "vocab-body.njk" %}

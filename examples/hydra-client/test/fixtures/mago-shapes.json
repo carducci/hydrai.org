@@ -1,0 +1,1425 @@
+{
+  "@context": {
+    "sh": "http://www.w3.org/ns/shacl#",
+    "ns": "https://mago.co/ns#",
+    "schema": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "hydrai": "https://hydrai.org/ns/agent#",
+    "sh:targetClass": {
+      "@type": "@id"
+    },
+    "sh:targetSubjectsOf": {
+      "@type": "@id"
+    },
+    "sh:path": {
+      "@type": "@id"
+    },
+    "sh:datatype": {
+      "@type": "@id"
+    },
+    "sh:class": {
+      "@type": "@id"
+    },
+    "sh:node": {
+      "@type": "@id"
+    },
+    "sh:nodeKind": {
+      "@type": "@id"
+    },
+    "sh:in": {
+      "@container": "@list",
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "@id": "ns:PostalAddressShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "Postal Address",
+      "sh:property": [
+        {
+          "sh:path": "schema:streetAddress",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Street Address",
+          "sh:maxCount": 1,
+          "sh:maxLength": 150
+        },
+        {
+          "sh:path": "schema:addressLocality",
+          "sh:datatype": "xsd:string",
+          "sh:name": "City",
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        },
+        {
+          "sh:path": "schema:addressRegion",
+          "sh:datatype": "xsd:string",
+          "sh:name": "State / Region",
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        },
+        {
+          "sh:path": "schema:postalCode",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Postal Code",
+          "sh:maxCount": 1,
+          "sh:maxLength": 20
+        },
+        {
+          "sh:path": "schema:addressCountry",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Country",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        }
+      ],
+      "sh:targetClass": "schema:PostalAddress"
+    },
+    {
+      "@id": "ns:UserRefShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "User Reference",
+      "sh:property": [
+        {
+          "sh:path": "schema:name",
+          "sh:datatype": "xsd:string",
+          "sh:name": "User Name",
+          "sh:maxCount": 1
+        }
+      ],
+      "sh:nodeKind": "sh:IRI"
+    },
+    {
+      "@id": "ns:ContactShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "Contact",
+      "sh:property": [
+        {
+          "sh:path": "schema:givenName",
+          "sh:datatype": "xsd:string",
+          "sh:name": "First Name",
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        },
+        {
+          "sh:path": "schema:familyName",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Last Name",
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        },
+        {
+          "sh:path": "schema:dateCreated",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Date Created",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:dateModified",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Date Modified",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:createdBy",
+          "sh:node": "ns:UserRefShape",
+          "sh:name": "Created By",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:modifiedBy",
+          "sh:node": "ns:UserRefShape",
+          "sh:name": "Modified By",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:salutation",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Salutation",
+          "sh:class": "ns:Salutation",
+          "sh:maxCount": 1,
+          "sh:description": "IRI of a Salutation resource, e.g. https://mago.co/Api/Salutation/Id/{guid}"
+        },
+        {
+          "sh:path": "schema:jobTitle",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Job Title",
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        },
+        {
+          "sh:path": "schema:description",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Description",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:doNotCall",
+          "sh:datatype": "xsd:boolean",
+          "sh:name": "Do Not Call",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:emailInvalid",
+          "sh:datatype": "xsd:boolean",
+          "sh:name": "Email Invalid",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:emailOptOut",
+          "sh:datatype": "xsd:boolean",
+          "sh:name": "Email Opt Out",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:homePhone",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Home Phone",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "ns:mobilePhone",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Mobile Phone",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "ns:workPhone",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Work Phone",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "ns:extension",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Extension",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "ns:otherPhone",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Other Phone",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "schema:faxNumber",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Fax",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "schema:email",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Primary Email Address",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255,
+          "sh:pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+        },
+        {
+          "sh:path": "ns:alternativeEmailAddress",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Alternative Email Address",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255,
+          "sh:pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+        },
+        {
+          "sh:path": "ns:primaryAddress",
+          "sh:node": "ns:PostalAddressShape",
+          "sh:name": "Primary Address",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:alternateAddress",
+          "sh:node": "ns:PostalAddressShape",
+          "sh:name": "Alternate Address",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:geo",
+          "sh:class": "schema:GeoCoordinates",
+          "sh:maxCount": 1,
+          "sh:name": "Geo Coordinates"
+        },
+        {
+          "sh:path": "ns:leadSource",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Lead Source",
+          "sh:class": "ns:LeadSource",
+          "sh:maxCount": 1,
+          "sh:description": "IRI of a LeadSource resource, e.g. https://mago.co/Api/LeadSource/Id/{guid}"
+        },
+        {
+          "sh:path": "ns:company",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Company",
+          "sh:class": "ns:Company",
+          "sh:maxCount": 1,
+          "sh:description": "IRI of a Company resource, e.g. https://mago.co/Api/Company/Id/{guid}"
+        },
+        {
+          "sh:path": "schema:birthDate",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Birth Date",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:bestTimeToContact",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Best Time to Contact",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:lastContacted",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Last Contacted",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:image",
+          "sh:datatype": "xsd:anyURI",
+          "sh:name": "Photo URL",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:bio",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Bio",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:twitterUrl",
+          "sh:datatype": "xsd:anyURI",
+          "sh:name": "X (Twitter) URL",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:facebookUrl",
+          "sh:datatype": "xsd:anyURI",
+          "sh:name": "Facebook URL",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:linkedinUrl",
+          "sh:datatype": "xsd:anyURI",
+          "sh:name": "LinkedIn URL",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:gdprConsentType",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "GDPR Consent Type",
+          "sh:maxCount": 1,
+          "sh:in": [
+            "ns:GDPRConsentFromIndividual",
+            "ns:GDPRLegitimateInterest",
+            "ns:GDPRTransactionConsent",
+            "ns:GDPRPublicInterestOrOfficialAuthority",
+            "ns:GDPRProtectSubjectVitalInterest",
+            "ns:GDPRStoringForCompliance"
+          ]
+        },
+        {
+          "sh:path": "ns:consentExpiry",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "GDPR Consent Expiry",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:contactCustom1",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Contact Custom 1",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:contactCustom2",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Contact Custom 2",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:contactCustom3",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Contact Custom 3",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:contactCustom4",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Contact Custom 4",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:contactCustom5",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Contact Custom 5",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:contactCustom6",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Contact Custom 6",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:contactCustom7",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Contact Custom 7",
+          "sh:maxCount": 1,
+          "sh:maxLength": 65500
+        },
+        {
+          "sh:path": "ns:contactCustom8",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Contact Custom 8",
+          "sh:maxCount": 1,
+          "sh:maxLength": 65500
+        },
+        {
+          "sh:path": "ns:contactCustom9",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Contact Custom 9",
+          "sh:maxCount": 1,
+          "sh:maxLength": 65500
+        },
+        {
+          "sh:path": "ns:contactCustom10",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Contact Custom 10",
+          "sh:maxCount": 1,
+          "sh:maxLength": 65500
+        }
+      ],
+      "sh:targetClass": "ns:Contact"
+    },
+    {
+      "@id": "ns:CompanyShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "Company",
+      "sh:property": [
+        {
+          "sh:path": "schema:name",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Name",
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:maxLength": 150
+        },
+        {
+          "sh:path": "schema:dateCreated",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Date Created",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:dateModified",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Date Modified",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:createdBy",
+          "sh:node": "ns:UserRefShape",
+          "sh:name": "Created By",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:modifiedBy",
+          "sh:node": "ns:UserRefShape",
+          "sh:name": "Modified By",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:description",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Description",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:companyType",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Company Type",
+          "sh:class": "ns:CompanyType",
+          "sh:maxCount": 1,
+          "sh:description": "IRI of a CompanyType resource, e.g. https://mago.co/Api/CompanyType/Id/{guid}"
+        },
+        {
+          "sh:path": "ns:revenue",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Revenue",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "schema:faxNumber",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Fax",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "ns:officePhone",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Office Phone",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "ns:otherPhone",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Other Phone",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "schema:url",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Website",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:billingAddress",
+          "sh:node": "ns:PostalAddressShape",
+          "sh:name": "Billing Address",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:shippingAddress",
+          "sh:node": "ns:PostalAddressShape",
+          "sh:name": "Shipping Address",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:geo",
+          "sh:class": "schema:GeoCoordinates",
+          "sh:maxCount": 1,
+          "sh:name": "Geo Coordinates"
+        },
+        {
+          "sh:path": "ns:rating",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Rating",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "schema:ownershipFundingInfo",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Ownership",
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        },
+        {
+          "sh:path": "schema:numberOfEmployees",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Number of Employees",
+          "sh:maxCount": 1,
+          "sh:maxLength": 10
+        },
+        {
+          "sh:path": "schema:tickerSymbol",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Ticker Symbol",
+          "sh:maxCount": 1,
+          "sh:maxLength": 10
+        },
+        {
+          "sh:path": "ns:principalContact",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Principal / SIC Code",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50
+        },
+        {
+          "sh:path": "ns:companyCustom1",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Company Custom 1",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:companyCustom2",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Company Custom 2",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:companyCustom3",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Company Custom 3",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:companyCustom4",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Company Custom 4",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:companyCustom5",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Company Custom 5",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:companyCustom6",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Company Custom 6",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:companyCustom7",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Company Custom 7",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:companyCustom8",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Company Custom 8",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:companyCustom9",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Company Custom 9",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:companyCustom10",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Company Custom 10",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        }
+      ],
+      "sh:targetClass": "ns:Company"
+    },
+    {
+      "@id": "ns:CallShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "Call",
+      "sh:property": [
+        {
+          "sh:path": "schema:name",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Name",
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:maxLength": 50
+        },
+        {
+          "sh:path": "schema:dateCreated",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Date Created",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:dateModified",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Date Modified",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:createdBy",
+          "sh:node": "ns:UserRefShape",
+          "sh:name": "Created By",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:modifiedBy",
+          "sh:node": "ns:UserRefShape",
+          "sh:name": "Modified By",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:description",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Description",
+          "sh:maxCount": 1,
+          "sh:maxLength": 16383
+        },
+        {
+          "sh:path": "ns:duration",
+          "sh:datatype": "xsd:duration",
+          "sh:name": "Duration (ISO 8601 time-only)",
+          "sh:maxCount": 1,
+          "sh:pattern": "^PT(\\d+H)?(\\d+M)?$"
+        },
+        {
+          "sh:path": "schema:startDate",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Start Date",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:endDate",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "End Date",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:callStatus",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Call Status",
+          "sh:maxCount": 1,
+          "sh:in": [
+            "ns:CallScheduled",
+            "ns:CallCancelled",
+            "ns:CallHeld"
+          ],
+          "sh:description": "Defaults to ns:CallScheduled when not supplied"
+        },
+        {
+          "sh:path": "ns:callDirection",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Call Direction",
+          "sh:maxCount": 1,
+          "sh:in": [
+            "ns:CallOutbound",
+            "ns:CallInbound"
+          ],
+          "sh:description": "Defaults to ns:CallOutbound when not supplied"
+        },
+        {
+          "sh:path": "ns:parent",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Parent",
+          "sh:maxCount": 1,
+          "sh:description": "IRI of the parent Contact, Company, or Event"
+        }
+      ],
+      "sh:targetClass": "ns:Call"
+    },
+    {
+      "@id": "ns:MagoEventShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "Event",
+      "sh:property": [
+        {
+          "sh:path": "schema:name",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Name",
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:maxLength": 50
+        },
+        {
+          "sh:path": "ns:eventStatus",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Event Status",
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:in": [
+            "ns:ActiveLead",
+            "ns:InactiveLead",
+            "ns:BookedGig",
+            "ns:PastGig"
+          ],
+          "sh:description": "Defaults to ns:ActiveLead when SalesStage is unset"
+        },
+        {
+          "sh:path": "schema:dateCreated",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Date Created",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:dateModified",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Date Modified",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:createdBy",
+          "sh:node": "ns:UserRefShape",
+          "sh:name": "Created By",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:modifiedBy",
+          "sh:node": "ns:UserRefShape",
+          "sh:name": "Modified By",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:description",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Description",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:leadSource",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Lead Source",
+          "sh:class": "ns:LeadSource",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:startDate",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Event Date",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:nextStep",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Next Step",
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        },
+        {
+          "sh:path": "ns:showType",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Show Type",
+          "sh:class": "ns:ShowType",
+          "sh:maxCount": 1,
+          "sh:description": "IRI of a ShowType resource"
+        },
+        {
+          "sh:path": "ns:alternateEventId",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Alternate Event ID",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:company",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Company",
+          "sh:class": "ns:Company",
+          "sh:maxCount": 1,
+          "sh:description": "IRI of a Company resource"
+        },
+        {
+          "sh:path": "ns:primaryContact",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Primary Contact",
+          "sh:class": "ns:Contact",
+          "sh:maxCount": 1,
+          "sh:description": "IRI of the primary Contact for this event"
+        },
+        {
+          "sh:path": "ns:venueName",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Venue Name",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:venueAddress",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Venue Address",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "schema:geo",
+          "sh:class": "schema:GeoCoordinates",
+          "sh:maxCount": 1,
+          "sh:name": "Geo Coordinates"
+        },
+        {
+          "sh:path": "ns:eventSize",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Size (Attendance)",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:audienceType",
+          "sh:nodeKind": "sh:IRI",
+          "sh:name": "Audience Type",
+          "sh:class": "ns:AudienceType",
+          "sh:maxCount": 1,
+          "sh:description": "IRI of an AudienceType resource"
+        },
+        {
+          "sh:path": "ns:showTime",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Show Time",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:showDuration",
+          "sh:datatype": "xsd:duration",
+          "sh:name": "Show Duration (ISO 8601)",
+          "sh:maxCount": 1,
+          "sh:pattern": "^P(?:\\d+D)?T(?:\\d+H)?(?:\\d+M)?$"
+        },
+        {
+          "sh:path": "ns:guestAgeRange",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Guest Age Range",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:guestOfHonor",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Guest of Honor",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:guestOfHonorAge",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Guest of Honor Age",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:alternateShowTimes",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Alternate Show Times",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50
+        },
+        {
+          "sh:path": "ns:decisionMaker",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Decision Maker",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:decisionDate",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Decision Date",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:siteContact",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Site Contact",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:bestTimeToContact",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Best Time to Contact",
+          "sh:maxCount": 1,
+          "sh:maxLength": 255
+        },
+        {
+          "sh:path": "ns:taxableMiles",
+          "sh:datatype": "xsd:decimal",
+          "sh:name": "Taxable Miles",
+          "sh:maxCount": 1,
+          "sh:pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+        },
+        {
+          "sh:path": "ns:travelInfo",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Travel Info",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50000
+        },
+        {
+          "sh:path": "ns:billableMiles",
+          "sh:datatype": "xsd:double",
+          "sh:name": "Billable Miles",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:mileageRate",
+          "sh:datatype": "xsd:double",
+          "sh:name": "Mileage Rate",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:fee",
+          "sh:datatype": "xsd:double",
+          "sh:name": "Fee",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:deposit",
+          "sh:datatype": "xsd:double",
+          "sh:name": "Deposit",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:depositPercentage",
+          "sh:datatype": "xsd:double",
+          "sh:name": "Deposit Percentage",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:depositIsPaid",
+          "sh:datatype": "xsd:boolean",
+          "sh:name": "Deposit Is Paid",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:balanceIsPaid",
+          "sh:datatype": "xsd:boolean",
+          "sh:name": "Balance Is Paid",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:gratuity",
+          "sh:datatype": "xsd:decimal",
+          "sh:name": "Gratuity",
+          "sh:maxCount": 1,
+          "sh:pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+        },
+        {
+          "sh:path": "ns:taxRate",
+          "sh:datatype": "xsd:double",
+          "sh:name": "Tax Rate",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:otherSales",
+          "sh:datatype": "xsd:double",
+          "sh:name": "Other Sales",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:quote1",
+          "sh:datatype": "xsd:double",
+          "sh:name": "Quote 1",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:description1",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Description 1",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50000
+        },
+        {
+          "sh:path": "ns:quote2",
+          "sh:datatype": "xsd:double",
+          "sh:name": "Quote 2",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:description2",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Description 2",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50000
+        },
+        {
+          "sh:path": "ns:quote3",
+          "sh:datatype": "xsd:double",
+          "sh:name": "Quote 3",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:description3",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Description 3",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50000
+        },
+        {
+          "sh:path": "ns:upsell",
+          "sh:datatype": "xsd:boolean",
+          "sh:name": "Upsell",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:upsellDescription",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Upsell Description",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50000
+        },
+        {
+          "sh:path": "ns:upsellPrice",
+          "sh:datatype": "xsd:double",
+          "sh:name": "Upsell Price",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:upsellQuantity",
+          "sh:datatype": "xsd:integer",
+          "sh:name": "Upsell Quantity",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:contractSent",
+          "sh:datatype": "xsd:boolean",
+          "sh:name": "Contract Sent",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:contractSigned",
+          "sh:datatype": "xsd:boolean",
+          "sh:name": "Contract Signed",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:promoCode",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Promo Code",
+          "sh:maxCount": 1,
+          "sh:maxLength": 20
+        },
+        {
+          "sh:path": "ns:sponsor",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Sponsor",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50
+        },
+        {
+          "sh:path": "ns:commentForClient",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Comment for Client",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50000
+        },
+        {
+          "sh:path": "ns:eventCustom1",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 1",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom2",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 2",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom3",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 3",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom4",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 4",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom5",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 5",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom6",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 6",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom7",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 7",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom8",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 8",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom9",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 9",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom10",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 10",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom11",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 11",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom12",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 12",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom13",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 13",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom14",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 14",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        },
+        {
+          "sh:path": "ns:eventCustom15",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Event Custom 15",
+          "sh:maxCount": 1,
+          "sh:maxLength": 500
+        }
+      ],
+      "sh:targetClass": "ns:MagoEvent"
+    },
+    {
+      "@id": "ns:UserShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "User",
+      "sh:property": [
+        {
+          "sh:path": "ns:userName",
+          "sh:datatype": "xsd:string",
+          "sh:name": "User Name",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:givenName",
+          "sh:datatype": "xsd:string",
+          "sh:name": "First Name",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:familyName",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Last Name",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:jobTitle",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Job Title",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50
+        },
+        {
+          "sh:path": "schema:description",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Description",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:primaryAddress",
+          "sh:node": "ns:PostalAddressShape",
+          "sh:name": "Primary Address",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:email",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Primary Email Address",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "ns:mobilePhone",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Mobile Phone",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "ns:homePhone",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Home Phone",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "ns:workPhone",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Work Phone",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50
+        },
+        {
+          "sh:path": "ns:otherPhone",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Other Phone",
+          "sh:maxCount": 1,
+          "sh:maxLength": 25
+        },
+        {
+          "sh:path": "schema:faxNumber",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Fax",
+          "sh:maxCount": 1,
+          "sh:maxLength": 50
+        },
+        {
+          "sh:path": "ns:timeZone",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Time Zone",
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        },
+        {
+          "sh:path": "ns:smsNumber",
+          "sh:datatype": "xsd:string",
+          "sh:name": "SMS Number",
+          "sh:maxCount": 1,
+          "sh:maxLength": 16
+        },
+        {
+          "sh:path": "schema:dateCreated",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Date Created",
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": "schema:dateModified",
+          "sh:datatype": "xsd:dateTime",
+          "sh:name": "Date Modified",
+          "sh:maxCount": 1
+        }
+      ],
+      "sh:targetClass": "ns:User"
+    },
+    {
+      "@id": "ns:LeadSourceShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "Lead Source",
+      "sh:property": [
+        {
+          "sh:path": "schema:name",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Name",
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        }
+      ],
+      "sh:targetClass": "ns:LeadSource"
+    },
+    {
+      "@id": "ns:SalutationShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "Salutation",
+      "sh:property": [
+        {
+          "sh:path": "schema:name",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Name",
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        }
+      ],
+      "sh:targetClass": "ns:Salutation"
+    },
+    {
+      "@id": "ns:AudienceTypeShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "Audience Type",
+      "sh:property": [
+        {
+          "sh:path": "schema:name",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Name",
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        }
+      ],
+      "sh:targetClass": "ns:AudienceType"
+    },
+    {
+      "@id": "ns:ShowTypeShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "Show Type",
+      "sh:property": [
+        {
+          "sh:path": "schema:name",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Name",
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        }
+      ],
+      "sh:targetClass": "ns:ShowType"
+    },
+    {
+      "@id": "ns:CompanyTypeShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "Company Type",
+      "sh:property": [
+        {
+          "sh:path": "schema:name",
+          "sh:datatype": "xsd:string",
+          "sh:name": "Name",
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:maxLength": 100
+        }
+      ],
+      "sh:targetClass": "ns:CompanyType"
+    },
+    {
+      "@id": "hydrai:GreetingShape",
+      "@type": "sh:NodeShape",
+      "rdfs:label": "Greeting",
+      "sh:targetSubjectsOf": "hydrai:greeting",
+      "sh:property": [
+        {
+          "sh:path": "hydrai:greeting",
+          "sh:datatype": "xsd:string",
+          "sh:maxLength": 500,
+          "sh:maxCount": 1,
+          "sh:name": "Greeting"
+        }
+      ]
+    }
+  ]
+}

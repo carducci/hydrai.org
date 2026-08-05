@@ -1,0 +1,300 @@
+/*
+ * Ported from the proof of concept verbatim down to the `--- additions ---` rule below. This is the
+ * customer-visible surface and it should not regress while the runtime is rebuilt beneath it, so the
+ * original declarations are kept byte-for-byte rather than tidied.
+ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f1117;
+  --bg2: #1a1d27;
+  --bg3: #22263a;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #e8eaf0;
+  --text2: #8b90a8;
+  --text3: #555a72;
+  --purple: #7c6fe0;
+  --purple2: #5a4fb8;
+  --green: #1d9e75;
+  --red: #d85a30;
+  --amber: #ba7517;
+  --mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--sans); }
+
+.app {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-head {
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.logo { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text3); margin-bottom: 2px; }
+.logo-name { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+.logo-name span { color: var(--purple); }
+
+.sidebar-body { flex: 1; overflow-y: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 14px; }
+
+.section-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 6px; font-weight: 600; }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; color: var(--text2); }
+.field input, .field select {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text); font-family: var(--mono); font-size: 11px;
+  padding: 7px 9px; outline: none; transition: border-color 0.15s; width: 100%;
+}
+.field input:focus, .field select:focus { border-color: var(--purple); }
+.field input::placeholder { color: var(--text3); }
+
+.connect-btn {
+  background: var(--purple); border: none; border-radius: 6px; color: white;
+  cursor: pointer; font-family: var(--sans); font-size: 12px; font-weight: 500;
+  padding: 8px 12px; transition: background 0.15s; width: 100%;
+}
+.connect-btn:hover { background: var(--purple2); }
+.connect-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.status {
+  font-size: 11px; border-radius: 5px; padding: 5px 9px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text3); text-align: center;
+}
+.status.connected { color: var(--green); border-color: var(--green); }
+.status.error { color: var(--red); border-color: var(--red); }
+
+.divider { height: 1px; background: var(--border); margin: 2px 0; }
+
+.cap-list { display: flex; flex-direction: column; gap: 3px; }
+.cap-item {
+  font-size: 11px; font-family: var(--mono); color: var(--text3);
+  padding: 5px 8px; border-radius: 5px; border: 1px solid var(--border);
+  background: var(--bg3); line-height: 1.4;
+}
+.cap-item.live { color: var(--purple); border-color: rgba(124,111,224,0.3); }
+.cap-item.live-sparql { color: var(--green); border-color: rgba(29,158,117,0.3); }
+.cap-name { font-weight: 600; }
+.cap-ops { font-size: 10px; color: var(--text3); margin-top: 1px; }
+.cap-item.live .cap-ops { color: rgba(124,111,224,0.5); }
+.cap-item.live-sparql .cap-ops { color: rgba(29,158,117,0.5); }
+
+.main { display: grid; grid-template-rows: 200px 1fr; overflow: hidden; }
+
+.trace { border-bottom: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+.trace-head {
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  font-size: 10px; letter-spacing: 0.1em; padding: 6px 12px;
+  text-transform: uppercase; color: var(--text3); font-weight: 600;
+  flex-shrink: 0; display: flex; align-items: center; gap: 8px;
+}
+.trace-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); }
+.trace-dot.active { background: var(--green); animation: pulse 1.4s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.trace-body { flex: 1; overflow-y: auto; padding: 8px 12px; }
+.trace-line { display: flex; gap: 10px; font-size: 11px; font-family: var(--mono); line-height: 1.65; align-items: flex-start; }
+.trace-ts { color: var(--text3); min-width: 44px; flex-shrink: 0; }
+.trace-msg { flex: 1; word-break: break-all; color: var(--text2); }
+.trace-line.step .trace-msg { color: var(--text); }
+.trace-line.http .trace-msg { color: var(--purple); }
+.trace-line.sparql .trace-msg { color: var(--green); }
+.trace-line.success .trace-msg { color: var(--green); }
+.trace-line.error .trace-msg { color: var(--red); }
+.trace-line.warn .trace-msg { color: var(--amber); }
+.trace-line.think .trace-msg { color: var(--amber); font-style: italic; }
+
+.chat { display: flex; flex-direction: column; overflow: hidden; }
+.messages { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
+.empty { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--text3); font-size: 14px; font-style: italic; }
+
+.msg-row { display: flex; gap: 10px; align-items: flex-start; max-width: 780px; }
+.msg-row.user { flex-direction: row-reverse; align-self: flex-end; }
+
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+}
+.avatar.user { background: var(--purple); color: white; }
+.avatar.agent { background: var(--bg3); border: 1px solid var(--border2); color: var(--text2); }
+
+.bubble { padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.6; max-width: calc(100% - 40px); white-space: pre-wrap; }
+.bubble.user { background: var(--purple); color: white; border-bottom-right-radius: 3px; }
+.bubble.agent { background: var(--bg2); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 3px; }
+.bubble.thinking { color: var(--text3); font-style: italic; }
+
+.input-row {
+  border-top: 1px solid var(--border); background: var(--bg2);
+  padding: 12px 16px; display: flex; gap: 10px; align-items: center; flex-shrink: 0;
+}
+.chat-input {
+  flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); font-family: var(--sans); font-size: 13px;
+  padding: 9px 13px; outline: none; transition: border-color 0.15s;
+}
+.chat-input:focus { border-color: var(--purple); }
+.chat-input::placeholder { color: var(--text3); }
+.chat-input:disabled { opacity: 0.4; }
+
+.send-btn {
+  background: var(--purple); border: none; border-radius: 8px; color: white;
+  cursor: pointer; font-family: var(--sans); font-size: 13px; font-weight: 500;
+  padding: 9px 18px; transition: background 0.15s; white-space: nowrap; flex-shrink: 0;
+}
+.send-btn:hover { background: var(--purple2); }
+.send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+/* --- additions --- */
+
+/*
+ * The POC carried these as inline `style` attributes with `onmouseover` handlers. Same rendering,
+ * expressed where the rest of the styling lives.
+ */
+
+[hidden] { display: none !important; }
+
+.how-link {
+  display: inline-block; margin-top: 8px; font-size: 11px;
+  color: var(--text3); text-decoration: none; transition: color 0.15s;
+}
+.how-link:hover { color: var(--purple); }
+
+.connect-fields { display: flex; flex-direction: column; gap: 8px; }
+
+.connect-btn.secondary {
+  background: transparent; border: 1px solid var(--border2);
+  color: var(--text2); margin-top: -6px;
+}
+.connect-btn.secondary:hover { background: var(--bg3); }
+.connect-btn.secondary.accent { border-color: rgba(124,111,224,0.4); color: var(--purple); }
+
+.cap-empty {
+  font-size: 11px; font-family: var(--mono); line-height: 1.4; padding: 5px 8px;
+  font-style: italic; border: none; color: var(--text3); background: none;
+}
+
+/*
+ * Credential masking (design D12).
+ *
+ * These fields are not `type="password"`, because a password field anywhere in the DOM is what makes
+ * a password manager offer to save credentials every time the user presses Enter in the chat box.
+ * They are session-scoped API keys, so visual masking with a reveal toggle is the right trade.
+ *
+ * `-webkit-text-security` is Chromium/WebKit only; Firefox has no CSS equivalent and will render
+ * these in the clear. That is a deliberate, narrow trade — the alternative reintroduces the very
+ * field type that causes the reported bug.
+ */
+.secret { position: relative; display: flex; }
+.secret input { padding-right: 46px; }
+.masked { -webkit-text-security: disc; text-security: disc; }
+.masked::placeholder { -webkit-text-security: none; text-security: none; }
+
+.reveal {
+  position: absolute; right: 1px; top: 1px; bottom: 1px;
+  background: transparent; border: none; border-radius: 0 6px 6px 0;
+  color: var(--text3); cursor: pointer;
+  font-family: var(--sans); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.06em; padding: 0 9px; transition: color 0.15s;
+}
+.reveal:hover { color: var(--purple); }
+.reveal:focus-visible { outline: 1px solid var(--purple); outline-offset: -1px; }
+
+/* Trace collapse (task 1.7). The head is a real button so it is keyboard-reachable. */
+.trace-head {
+  width: 100%; cursor: pointer; text-align: left;
+  font-family: var(--sans); appearance: none;
+}
+.trace-head:hover { color: var(--text2); }
+.trace-head:focus-visible { outline: 1px solid var(--purple); outline-offset: -2px; }
+.trace-title { flex: 1; }
+.trace-count { font-weight: 600; color: var(--text3); letter-spacing: 0; text-transform: none; }
+.trace-chevron { transition: transform 0.15s; font-size: 9px; }
+
+/* Collapsed: the head keeps its height, the body goes, the chat takes the space. */
+.main.trace-collapsed { grid-template-rows: auto 1fr; }
+.main.trace-collapsed .trace-body { display: none; }
+.main.trace-collapsed .trace-chevron { transform: rotate(-90deg); }
+
+/*
+ * Chat input as a textarea (design D12 and task 1.6). Textareas carry no implicit-submission
+ * semantics, which is the other half of the password-manager fix, and autogrow needs one anyway.
+ * Height is driven in JS from the computed line height, capped at four rows.
+ */
+.input-row { align-items: flex-end; }
+.chat-input {
+  resize: none; overflow-y: auto; line-height: 1.5;
+  min-height: 0; max-height: 200px; display: block;
+}
+
+/*
+ * Rendered agent replies (change render-agent-reply-markdown).
+ *
+ * An agent reply's bubble holds sanitised Markdown (render-markdown.ts), so it lays out as normal
+ * flow rather than the pre-wrapped plain text of a user message. Our own plain-text notices — the
+ * "thinking…" placeholder and failure lines — keep the `.thinking` class and stay pre-wrapped.
+ */
+.bubble.agent { white-space: normal; }
+.bubble.agent.thinking { white-space: pre-wrap; }
+
+/* Block rhythm inside a bubble; the first and last child hug the bubble padding. */
+.bubble.agent > :first-child { margin-top: 0; }
+.bubble.agent > :last-child { margin-bottom: 0; }
+.bubble.agent p { margin: 0 0 8px; }
+.bubble.agent h1, .bubble.agent h2, .bubble.agent h3 { margin: 12px 0 6px; line-height: 1.3; font-weight: 600; }
+.bubble.agent h1 { font-size: 16px; }
+.bubble.agent h2 { font-size: 15px; }
+.bubble.agent h3 { font-size: 14px; }
+.bubble.agent ul, .bubble.agent ol { margin: 0 0 8px; padding-left: 20px; }
+.bubble.agent li { margin: 2px 0; }
+.bubble.agent a { color: var(--purple); text-decoration: underline; }
+.bubble.agent a:hover { color: var(--text); }
+.bubble.agent blockquote { margin: 0 0 8px; padding: 2px 10px; border-left: 2px solid var(--border2); color: var(--text2); }
+
+/* Inline code, and fenced blocks that keep their own whitespace and scroll if wide. */
+.bubble.agent code {
+  font-family: var(--mono); font-size: 12px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 1px 4px;
+}
+.bubble.agent pre {
+  margin: 0 0 8px; padding: 10px 12px; overflow-x: auto;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+}
+.bubble.agent pre code { background: none; border: none; padding: 0; line-height: 1.5; }
+
+/*
+ * Tables. A CRM row set is wider than the bubble more often than not, so the table itself is the
+ * horizontal scroll container (`display: block` + `overflow-x: auto`) — no wrapper element, so the
+ * sanitiser allowlist needn't admit one. Column alignment comes from marked's `align` attribute; the
+ * explicit `[align]` rules below apply it as CSS so a blanket `text-align` can never override it.
+ */
+.bubble.agent table {
+  display: block; width: max-content; max-width: 100%; overflow-x: auto;
+  border-collapse: collapse; margin: 0 0 8px; font-size: 12px;
+}
+.bubble.agent th, .bubble.agent td { border: 1px solid var(--border2); padding: 5px 9px; }
+.bubble.agent th { background: var(--bg3); font-weight: 600; }
+.bubble.agent [align="left"] { text-align: left; }
+.bubble.agent [align="center"] { text-align: center; }
+.bubble.agent [align="right"] { text-align: right; }

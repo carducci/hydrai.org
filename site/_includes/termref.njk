@@ -1,0 +1,58 @@
+{#
+  Term-reference macros. The single rendering of a vocabulary term, used by BOTH the browsable
+  namespace page (via vocab-body.njk) and the term documentation pages (docs/greeting, example-query).
+  Every value comes from `site/_data/vocab.js`, which parses the `.ttl` sources — so what the site
+  shows is generated from the ontology, never hand-copied prose that could drift.
+
+  The markup carries RDFa (`about` / `typeof` / `property` / `rel` / `resource`), so the human-visible
+  page is itself a machine-readable RDF serialization — a third embedding beside the inline JSON-LD
+  and the `rel=alternate` links. The RDFa is emitted from the same model, so it cannot disagree with
+  the RDF either. RDFa prefixes are declared on the page container (see vocab-body.njk).
+
+  `level` sets the heading rank so the macro fits the surrounding document outline.
+#}
+
+{% macro termCard(term, level=3) %}
+<section class="term" id="{{ term.local }}" about="{{ term.iri }}"{% if term.types.length %} typeof="{{ term.types | join(' ') }}"{% endif %}>
+  <meta property="rdfs:label" content="{{ term.label }}">
+  <div class="term-head">
+    <h{{ level }} class="term-name"><a href="#{{ term.local }}"><code>{{ term.curie }}</code></a></h{{ level }}>
+    <span class="term-kind">{{ term.kindLabel }}</span>
+  </div>
+  {% if term.label and term.label != term.local %}<p class="term-label">{{ term.label }}</p>{% endif %}
+  {% if term.comment %}<p class="term-comment" property="rdfs:comment">{{ term.comment }}</p>{% endif %}
+  <dl class="term-meta">
+    <dt>IRI</dt><dd><code>{{ term.iri }}</code></dd>
+    {% if term.types.length %}<dt>type</dt><dd>{% for t in term.types %}<code>{{ t }}</code>{% if not loop.last %}, {% endif %}{% endfor %}</dd>{% endif %}
+    {% if term.domain %}<dt>domain</dt><dd rel="rdfs:domain" resource="{{ term.domain }}"><code>{{ term.domainCurie }}</code></dd>{% endif %}
+    {% if term.range %}<dt>range</dt><dd rel="rdfs:range" resource="{{ term.range }}"><code>{{ term.rangeCurie }}</code></dd>{% endif %}
+    {%- for e in term.equivalentTo %}
+    <dt>equivalent to</dt><dd rel="{{ e.predicate }}" resource="{{ e.iri }}"><a href="{{ e.iri }}"><code>{{ e.curie }}</code></a></dd>
+    {%- endfor %}
+  </dl>
+  {% if term.isDefinedBy.length or term.seeAlso.length %}
+  <p class="term-links">
+    {%- for d in term.isDefinedBy %}<span rel="rdfs:isDefinedBy" resource="{{ d }}">defined by <a href="{{ d }}"><code>{{ d | curie }}</code></a></span>{% if not loop.last or term.seeAlso.length %} · {% endif %}{% endfor -%}
+    {%- for s in term.seeAlso %}<span rel="rdfs:seeAlso" resource="{{ s }}">see also <a href="{{ s }}">{{ s }}</a></span>{% if not loop.last %} · {% endif %}{% endfor -%}
+  </p>
+  {% endif %}
+</section>
+{% endmacro %}
+
+{% macro shapeCard(shape, level=3) %}
+<section class="term shape" id="{{ shape.local }}" about="{{ shape.iri }}" typeof="sh:NodeShape">
+  <div class="term-head">
+    <h{{ level }} class="term-name"><a href="#{{ shape.local }}"><code>{{ shape.curie }}</code></a></h{{ level }}>
+    <span class="term-kind">{{ shape.kindLabel }}</span>
+  </div>
+  {% if shape.comment %}<p class="term-comment" property="rdfs:comment">{{ shape.comment }}</p>{% endif %}
+  {% if shape.targetCurie %}<p class="term-meta-inline"><strong>targets</strong> <code>{{ shape.targetCurie }}</code></p>{% endif %}
+  {% for prop in shape.properties %}
+  <ul class="shape-prop">
+    {%- for c in prop.constraints %}
+    <li><code>{{ c.pred }}</code>{% if c.value %} <code>{{ c.value }}</code>{% elif c.nested %} [ {% for n in c.nested %}<code>{{ n.pred }}</code> {{ n.value }}{% if not loop.last %}, {% endif %}{% endfor %} ]{% endif %}</li>
+    {%- endfor %}
+  </ul>
+  {% endfor %}
+</section>
+{% endmacro %}

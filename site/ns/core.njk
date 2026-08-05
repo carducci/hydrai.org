@@ -1,0 +1,12 @@
+---
+layout: base.njk
+permalink: /ns/core/index.html
+bodyClass: vocab
+title: "core# — the Hydra stewardship mirror"
+description: The HydrAI core# partition — the Hydra Core Vocabulary mirrored via equivalence. A formal backbone; emit canonical hydra IRIs over the wire.
+alternates:
+  - { type: "text/turtle", href: "/ns/core.ttl", title: "Turtle" }
+  - { type: "application/ld+json", href: "/ns/core.jsonld", title: "JSON-LD" }
+---
+{% set v = vocab.core %}
+{% include "vocab-body.njk" %}

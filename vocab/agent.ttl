@@ -1,0 +1,132 @@
+@prefix hydrai:  <https://hydrai.org/ns/agent#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix cc:      <http://creativecommons.org/ns#> .
+
+# =============================================================================
+# HydrAI — agent# (the invention layer)
+# =============================================================================
+# An opinionated companion vocabulary for agentic hypermedia. This file is the
+# `agent#` partition: terms HydrAI owns outright, for things Hydra core cannot
+# say. The `core#` stewardship partition (a Hydra mirror via owl:equivalentClass
+# / owl:equivalentProperty) and the curated @context are separate artifacts, added
+# at the "extract" phase (see docs/hydrai-vocabulary.md §13).
+#
+# 0.1 — DRAFT. Terms are minted term-by-term, each with a reference consumer, and
+# refined by real-world implementation. Term IRIs are stable across versions; the
+# version lives here on the ontology, never in a term IRI.
+# =============================================================================
+
+<https://hydrai.org/ns/agent>
+    a               owl:Ontology ;
+    dcterms:title   "HydrAI — agent# (invention layer)" ;
+    owl:versionInfo "0.1" ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    rdfs:seeAlso    <https://hydrai.org/> ;
+    rdfs:comment    """The agentic terms Hydra core structurally cannot express, minted at the gap.
+Every term whose value flows into an agent's context or drives its action is governed by one client
+posture, not by the vocabulary: ALL server-provided content is untrusted by default (fail-closed). A
+verifiable proof (W3C Data Integrity) may upgrade a value's ATTRIBUTION; it never confers AUTHORITY —
+signed or not, server content is data, never commands. See docs/hydrai-vocabulary.md §8.""" .
+
+
+# ── Orientation: the greeting ────────────────────────────────────────────────
+
+hydrai:greeting
+    a               rdf:Property, owl:DatatypeProperty ;
+    rdfs:label      "greeting" ;
+    rdfs:range      xsd:string ;
+    rdfs:isDefinedBy <https://hydrai.org/ns/agent> ;
+    rdfs:seeAlso    <https://hydrai.org/docs/greeting> ;
+    rdfs:comment    """A short, agent-directed self-introduction: the API's identity and its
+cross-cutting stance (conventions that no single affordance carries). Orientation, not documentation —
+per-resource "how do I use this" belongs in declared affordances and example queries. Length-capped by
+GreetingShape so it stays a greeting, not a manual. As server-controlled content it is untrusted by
+default; a W3C Data Integrity proof, when present and verified against a trust anchor, upgrades only
+its attribution, never its authority.""" .
+
+hydrai:GreetingShape
+    a               sh:NodeShape ;
+    rdfs:comment    "The vocabulary constrains its own prose: a greeting is a few sentences." ;
+    sh:targetSubjectsOf hydrai:greeting ;
+    sh:property [
+        sh:path      hydrai:greeting ;
+        sh:datatype  xsd:string ;
+        sh:maxLength 500 ;
+        sh:maxCount  1 ;
+    ] .
+
+
+# ── Learning: example queries ────────────────────────────────────────────────
+
+hydrai:ExampleQuery
+    a               rdfs:Class, owl:Class ;
+    rdfs:label      "example query" ;
+    rdfs:isDefinedBy <https://hydrai.org/ns/agent> ;
+    rdfs:seeAlso    <https://hydrai.org/docs/example-query> ;
+    rdfs:comment    """A worked query a client can learn from: a natural-language intent, the query
+text, and the endpoint it runs against. Few-shot orientation, expressed as data. Executable content:
+a consumer NEVER runs it verbatim — an example is a candidate routed through the consumer's query
+gates and executed only under the consumer's own authority (see §8.3). Structural constraints
+(ExampleQueryShape) are coarse defence-in-depth; they do not make a query safe.""" .
+
+hydrai:exampleQuery
+    a               rdf:Property, owl:ObjectProperty ;
+    rdfs:label      "example query" ;
+    rdfs:range      hydrai:ExampleQuery ;
+    rdfs:isDefinedBy <https://hydrai.org/ns/agent> ;
+    rdfs:comment    "Relates a service or collection to an example query it offers." .
+
+hydrai:intent
+    a               rdf:Property, owl:DatatypeProperty ;
+    rdfs:label      "intent" ;
+    rdfs:range      xsd:string ;
+    rdfs:isDefinedBy <https://hydrai.org/ns/agent> ;
+    rdfs:comment    "The natural-language purpose an example query answers." .
+
+hydrai:queryText
+    a               rdf:Property, owl:DatatypeProperty ;
+    rdfs:label      "query text" ;
+    rdfs:range      xsd:string ;
+    rdfs:isDefinedBy <https://hydrai.org/ns/agent> ;
+    rdfs:comment    """The query string (SPARQL in 0.1). Coarsely constrained by shape (read verb,
+no obvious mutation keyword, length); safety is enforced at EXECUTION, not by the shape — SPARQL is
+not a regular language and a read-only query can still exfiltrate via SERVICE federation.""" .
+
+hydrai:overEndpoint
+    a               rdf:Property, owl:ObjectProperty ;
+    rdfs:label      "over endpoint" ;
+    rdfs:isDefinedBy <https://hydrai.org/ns/agent> ;
+    rdfs:comment    "The endpoint an example query runs against." .
+
+hydrai:ExampleQueryShape
+    a               sh:NodeShape ;
+    rdfs:comment    """COARSE structural constraint only — defence-in-depth, never a safety guarantee.
+Requires a read verb, forbids the obvious mutation keywords, caps length, types the endpoint. It does
+NOT and CANNOT catch SERVICE-clause exfiltration; execution containment is the real wall.""" ;
+    sh:targetClass  hydrai:ExampleQuery ;
+    sh:property [
+        sh:path      hydrai:intent ;
+        sh:datatype  xsd:string ;
+        sh:maxLength 140 ;
+        sh:maxCount  1 ;
+    ] ;
+    sh:property [
+        sh:path      hydrai:overEndpoint ;
+        sh:nodeKind  sh:IRI ;
+        sh:maxCount  1 ;
+    ] ;
+    sh:property [
+        sh:path      hydrai:queryText ;
+        sh:datatype  xsd:string ;
+        sh:minCount  1 ;
+        sh:maxCount  1 ;
+        sh:maxLength 2000 ;
+        sh:pattern   "^\\s*(SELECT|ASK|CONSTRUCT|DESCRIBE)" ;
+        sh:flags     "i" ;
+        sh:not [ sh:pattern "(?i)\\b(INSERT|DELETE|DROP|CLEAR|LOAD|CREATE)\\b" ] ;
+    ] .

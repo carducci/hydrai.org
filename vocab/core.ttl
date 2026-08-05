@@ -1,0 +1,113 @@
+@prefix hcore:   <https://hydrai.org/ns/core#> .
+@prefix hydra:   <http://www.w3.org/ns/hydra/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# =============================================================================
+# HydrAI — core# (the stewardship layer)   ·   GENERATED — do not hand-edit
+# =============================================================================
+# Generated from the Hydra Core Vocabulary by vocab/build-core.mjs. 68 terms mirrored.
+#
+# core# adopts the (dormant) Hydra Core Vocabulary and re-asserts it, unchanged, via one equivalence
+# axiom per term. It exists so "HydrAI is a conservative superset of Hydra" is a theorem, not a claim.
+#
+#   >>> USE CANONICAL hydra: IRIs OVER THE WIRE. <<<
+#
+# core# is a formal backbone for reasoners and for the "superset" proof — it is NOT a wire vocabulary.
+# A HydrAI-described API keeps emitting canonical hydra: IRIs, so pure-Hydra clients keep working; the
+# curated @context is what makes the surface read as one vocabulary. Never emit hcore: on the wire.
+#
+# Purity (enforced by vocab/vocab.test.mjs): every subject here is an hcore: term carrying exactly one
+# equivalence axiom whose object is the canonical hydra: term. No domain, range, label, or comment is
+# added to a mirror — that would change Hydra's meaning through the equivalence. hydra: never appears
+# as a subject; the assertion is always hydrai→hydra.
+# =============================================================================
+
+<https://hydrai.org/ns/core>
+    a               owl:Ontology ;
+    dcterms:title   "HydrAI — core# (Hydra stewardship mirror)" ;
+    owl:versionInfo "0.1" ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    rdfs:seeAlso    <https://www.hydra-cg.com/spec/latest/core/> ;
+    rdfs:comment    """Stewardship mirror of the Hydra Core Vocabulary. Each term is re-asserted via a single owl:equivalentClass / owl:equivalentProperty / owl:sameAs axiom to its canonical hydra: IRI, making "HydrAI ⊇ Hydra" provable. USE hydra: IRIs OVER THE WIRE — core# is a formal backbone, not a wire vocabulary; APIs emit canonical hydra: IRIs so pure-Hydra clients keep working.""" .
+
+
+# ── Classes (17) ────────────────────────────────────
+
+hcore:ApiDocumentation  owl:equivalentClass  hydra:ApiDocumentation .
+hcore:BaseUriSource  owl:equivalentClass  hydra:BaseUriSource .
+hcore:Class  owl:equivalentClass  hydra:Class .
+hcore:Collection  owl:equivalentClass  hydra:Collection .
+hcore:Error  owl:equivalentClass  hydra:Error .
+hcore:HeaderSpecification  owl:equivalentClass  hydra:HeaderSpecification .
+hcore:IriTemplate  owl:equivalentClass  hydra:IriTemplate .
+hcore:IriTemplateMapping  owl:equivalentClass  hydra:IriTemplateMapping .
+hcore:Link  owl:equivalentClass  hydra:Link .
+hcore:Operation  owl:equivalentClass  hydra:Operation .
+hcore:PartialCollectionView  owl:equivalentClass  hydra:PartialCollectionView .
+hcore:Resource  owl:equivalentClass  hydra:Resource .
+hcore:Rfc6570Template  owl:equivalentClass  hydra:Rfc6570Template .
+hcore:Status  owl:equivalentClass  hydra:Status .
+hcore:SupportedProperty  owl:equivalentClass  hydra:SupportedProperty .
+hcore:TemplatedLink  owl:equivalentClass  hydra:TemplatedLink .
+hcore:VariableRepresentation  owl:equivalentClass  hydra:VariableRepresentation .
+
+
+# ── Properties (47) ─────────────────────────────
+
+hcore:apiDocumentation  owl:equivalentProperty  hydra:apiDocumentation .
+hcore:closedSet  owl:equivalentProperty  hydra:closedSet .
+hcore:collection  owl:equivalentProperty  hydra:collection .
+hcore:description  owl:equivalentProperty  hydra:description .
+hcore:entrypoint  owl:equivalentProperty  hydra:entrypoint .
+hcore:expects  owl:equivalentProperty  hydra:expects .
+hcore:expectsHeader  owl:equivalentProperty  hydra:expectsHeader .
+hcore:extension  owl:equivalentProperty  hydra:extension .
+hcore:first  owl:equivalentProperty  hydra:first .
+hcore:freetextQuery  owl:equivalentProperty  hydra:freetextQuery .
+hcore:headerName  owl:equivalentProperty  hydra:headerName .
+hcore:last  owl:equivalentProperty  hydra:last .
+hcore:limit  owl:equivalentProperty  hydra:limit .
+hcore:manages  owl:equivalentProperty  hydra:manages .
+hcore:mapping  owl:equivalentProperty  hydra:mapping .
+hcore:member  owl:equivalentProperty  hydra:member .
+hcore:memberAssertion  owl:equivalentProperty  hydra:memberAssertion .
+hcore:method  owl:equivalentProperty  hydra:method .
+hcore:next  owl:equivalentProperty  hydra:next .
+hcore:object  owl:equivalentProperty  hydra:object .
+hcore:offset  owl:equivalentProperty  hydra:offset .
+hcore:operation  owl:equivalentProperty  hydra:operation .
+hcore:pageIndex  owl:equivalentProperty  hydra:pageIndex .
+hcore:pageReference  owl:equivalentProperty  hydra:pageReference .
+hcore:possibleStatus  owl:equivalentProperty  hydra:possibleStatus .
+hcore:possibleValue  owl:equivalentProperty  hydra:possibleValue .
+hcore:previous  owl:equivalentProperty  hydra:previous .
+hcore:property  owl:equivalentProperty  hydra:property .
+hcore:readable  owl:equivalentProperty  hydra:readable .
+hcore:required  owl:equivalentProperty  hydra:required .
+hcore:resolveRelativeUsing  owl:equivalentProperty  hydra:resolveRelativeUsing .
+hcore:returns  owl:equivalentProperty  hydra:returns .
+hcore:returnsHeader  owl:equivalentProperty  hydra:returnsHeader .
+hcore:search  owl:equivalentProperty  hydra:search .
+hcore:statusCode  owl:equivalentProperty  hydra:statusCode .
+hcore:subject  owl:equivalentProperty  hydra:subject .
+hcore:supportedClass  owl:equivalentProperty  hydra:supportedClass .
+hcore:supportedOperation  owl:equivalentProperty  hydra:supportedOperation .
+hcore:supportedProperty  owl:equivalentProperty  hydra:supportedProperty .
+hcore:template  owl:equivalentProperty  hydra:template .
+hcore:title  owl:equivalentProperty  hydra:title .
+hcore:totalItems  owl:equivalentProperty  hydra:totalItems .
+hcore:variable  owl:equivalentProperty  hydra:variable .
+hcore:variableRepresentation  owl:equivalentProperty  hydra:variableRepresentation .
+hcore:view  owl:equivalentProperty  hydra:view .
+hcore:writable  owl:equivalentProperty  hydra:writable .
+hcore:writeable  owl:equivalentProperty  hydra:writeable .
+
+
+# ── Named individuals (4) ──────────────────────
+
+hcore:BasicRepresentation  owl:sameAs  hydra:BasicRepresentation .
+hcore:ExplicitRepresentation  owl:sameAs  hydra:ExplicitRepresentation .
+hcore:LinkContext  owl:sameAs  hydra:LinkContext .
+hcore:Rfc3986  owl:sameAs  hydra:Rfc3986 .

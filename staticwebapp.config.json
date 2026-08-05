@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json.schemas.azureedge.net/staticwebapp.config.json",
+
+  "//": "Azure Static Web Apps cannot content-negotiate on the Accept header. The vocabulary is therefore published as three pre-generated representations at stable URLs, and the alternates are advertised two ways: an HTTP `Link: rel=alternate` header here, and `<link rel=alternate>` plus inline JSON-LD in the HTML representation itself (see vocab/build-vocab.mjs).",
+
+  "mimeTypes": {
+    ".ttl": "text/turtle",
+    ".jsonld": "application/ld+json",
+    ".json": "application/json"
+  },
+
+  "routes": [
+    {
+      "route": "/ns/agent",
+      "rewrite": "/ns/agent/index.html",
+      "headers": {
+        "Link": "</ns/agent.ttl>; rel=\"alternate\"; type=\"text/turtle\", </ns/agent.jsonld>; rel=\"alternate\"; type=\"application/ld+json\"",
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "route": "/ns/agent.ttl",
+      "headers": {
+        "Content-Type": "text/turtle; charset=utf-8",
+        "Link": "</ns/agent>; rel=\"alternate\"; type=\"text/html\", </ns/agent.jsonld>; rel=\"alternate\"; type=\"application/ld+json\"",
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "route": "/ns/agent.jsonld",
+      "headers": {
+        "Content-Type": "application/ld+json; charset=utf-8",
+        "Link": "</ns/agent>; rel=\"alternate\"; type=\"text/html\", </ns/agent.ttl>; rel=\"alternate\"; type=\"text/turtle\"",
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "route": "/ns/core",
+      "rewrite": "/ns/core/index.html",
+      "headers": {
+        "Link": "</ns/core.ttl>; rel=\"alternate\"; type=\"text/turtle\", </ns/core.jsonld>; rel=\"alternate\"; type=\"application/ld+json\"",
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "route": "/ns/core.ttl",
+      "headers": {
+        "Content-Type": "text/turtle; charset=utf-8",
+        "Link": "</ns/core>; rel=\"alternate\"; type=\"text/html\", </ns/core.jsonld>; rel=\"alternate\"; type=\"application/ld+json\"",
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "route": "/ns/core.jsonld",
+      "headers": {
+        "Content-Type": "application/ld+json; charset=utf-8",
+        "Link": "</ns/core>; rel=\"alternate\"; type=\"text/html\", </ns/core.ttl>; rel=\"alternate\"; type=\"text/turtle\"",
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "route": "/agent",
+      "redirect": "/agent/",
+      "statusCode": 301
+    },
+    {
+      "route": "/agent/assets/*",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    }
+  ],
+
+  "responseOverrides": {
+    "404": {
+      "rewrite": "/404.html",
+      "statusCode": 404
+    }
+  },
+
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  }
+}

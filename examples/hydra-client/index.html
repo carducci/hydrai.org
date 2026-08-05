@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HydrAI — the generic agent</title>
+<link rel="stylesheet" href="/src/ui/styles.css">
+</head>
+<body>
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-head">
+      <div class="logo">HydrAI</div>
+      <div class="logo-name">Generic <span>Agent</span></div>
+      <a class="how-link" href="how-it-works.html">How this works &#8599;</a>
+      <a class="how-link" href="/">← hydrai.org</a>
+    </div>
+    <div class="sidebar-body">
+      <div>
+        <div class="section-label">Connection</div>
+        <div class="connect-fields">
+          <div class="field">
+            <label for="entrypoint">API entrypoint</label>
+            <input type="text" id="entrypoint" placeholder="https://…/Api/"
+                   autocomplete="off" spellcheck="false" autocapitalize="off" />
+          </div>
+          <!--
+            Credential fields are deliberately NOT type="password" — see design D12. These are
+            session-scoped API keys, not account passwords, and a password field in the DOM is what
+            makes a password manager offer to save credentials on every message send. Masking is
+            visual only, via CSS, with a reveal toggle.
+          -->
+          <div class="field">
+            <label for="crm-token">API bearer token</label>
+            <div class="secret">
+              <input type="text" id="crm-token" class="masked" placeholder="Paste token…"
+                     autocomplete="off" data-1p-ignore data-lpignore="true"
+                     data-form-type="other" data-bwignore
+                     spellcheck="false" autocapitalize="off" autocorrect="off" />
+              <button type="button" class="reveal" data-reveal="crm-token"
+                      aria-pressed="false" aria-label="Show API bearer token">show</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="ai-key">Anthropic API key</label>
+            <div class="secret">
+              <input type="text" id="ai-key" class="masked" placeholder="sk-ant-…"
+                     autocomplete="off" data-1p-ignore data-lpignore="true"
+                     data-form-type="other" data-bwignore
+                     spellcheck="false" autocapitalize="off" autocorrect="off" />
+              <button type="button" class="reveal" data-reveal="ai-key"
+                      aria-pressed="false" aria-label="Show Anthropic API key">show</button>
+            </div>
+          </div>
+          <!--
+            The model selector (task 6.2). Swapping to the smallest model and watching the task still
+            complete is the strongest demonstration available: the capability is in the tool schemas
+            and the gates, not in the model's recall.
+          -->
+          <div class="field">
+            <label for="model">Model</label>
+            <select id="model" autocomplete="off"></select>
+          </div>
+          <button class="connect-btn" id="connect-btn">Connect</button>
+          <button class="connect-btn secondary accent" id="refresh-btn" hidden>↻ Refresh metadata</button>
+          <button class="connect-btn secondary" id="clear-btn">Clear saved</button>
+          <div class="status" id="status">not connected</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <!--
+        The tier ladder (task 3.6). Not decoration: it is what an operator pointing this at their own
+        API reads to see which documents they publish and what publishing the next one would buy.
+      -->
+      <div>
+        <div class="section-label">Capability tier</div>
+        <div class="cap-list" id="tier-list"></div>
+        <div class="cap-empty" id="tier-note"></div>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <div class="section-label">REST capabilities</div>
+        <div class="cap-list" id="cap-list">
+          <div class="cap-empty">connect to discover</div>
+        </div>
+      </div>
+      <div class="divider" id="sparql-divider" hidden></div>
+      <div id="sparql-section" hidden>
+        <div class="section-label">SPARQL capabilities</div>
+        <div class="cap-list" id="sparql-cap"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main" id="main">
+    <div class="trace">
+      <!--
+        The trace is what makes the machinery visible, so it defaults to expanded. Collapsing hides
+        the body only: logging continues into the model behind it and expanding reveals everything
+        recorded while hidden.
+      -->
+      <button type="button" class="trace-head" id="trace-toggle"
+              aria-expanded="true" aria-controls="trace-body">
+        <span class="trace-dot" id="trace-dot"></span>
+        <span class="trace-title">agent trace</span>
+        <span class="trace-count" id="trace-count" hidden></span>
+        <span class="trace-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="trace-body" id="trace-body"></div>
+    </div>
+    <div class="chat">
+      <div class="messages" id="messages">
+        <div class="empty" id="empty">Connect to start talking to your CRM</div>
+      </div>
+      <div class="input-row">
+        <textarea class="chat-input" id="chat-input" rows="1" disabled
+                  placeholder="Ask about your contacts, events, or tell me to add someone…"
+                  autocomplete="off" spellcheck="false"></textarea>
+        <button class="send-btn" id="send-btn" disabled>Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

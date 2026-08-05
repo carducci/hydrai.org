@@ -1,0 +1,27 @@
+{
+  "name": "hydrai-org",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "hydrai.org — the HydrAI reference site: landing + docs, the published vocabulary, the hosted generic agent, and the generic Hydra client / MCP server as reference code.",
+  "workspaces": [
+    "examples/hydra-client"
+  ],
+  "scripts": {
+    "build:agent": "npm run build --workspace hydra-client",
+    "build:core": "node vocab/build-core.mjs",
+    "build:vocab": "node vocab/build-vocab.mjs",
+    "build:site": "eleventy",
+    "build": "npm run build:agent && npm run build:vocab && npm run build:site",
+    "test:vocab": "node --test vocab/vocab.test.mjs",
+    "test": "npm run test:vocab && npm test --workspace hydra-client",
+    "dev": "npm run build:agent && npm run build:vocab && eleventy --serve",
+    "dev:site": "eleventy --serve",
+    "clean": "node -e \"import('node:fs').then(fs=>['_site','examples/hydra-client/dist','vocab/dist'].forEach(d=>fs.rmSync(d,{recursive:true,force:true})))\""
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "jsonld": "^9.0.0",
+    "n3": "^2.1.1"
+  }
+}

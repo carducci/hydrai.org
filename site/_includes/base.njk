@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" prefix="hydrai: https://hydrai.org/ns/agent# hcore: https://hydrai.org/ns/core# hydra: http://www.w3.org/ns/hydra/core# rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns# rdfs: http://www.w3.org/2000/01/rdf-schema# owl: http://www.w3.org/2002/07/owl# sh: http://www.w3.org/ns/shacl# xsd: http://www.w3.org/2001/XMLSchema# dcterms: http://purl.org/dc/terms/ cc: http://creativecommons.org/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if title %}{{ title }} — {{ site.name }}{% else %}{{ site.name }} — {{ site.tagline }}{% endif %}</title>
+  <meta name="description" content="{{ description or site.description }}">
+  <meta property="og:title" content="{{ title or site.name }}">
+  <meta property="og:description" content="{{ description or site.description }}">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  {%- if alternates %}
+  {%- for a in alternates %}
+  <link rel="alternate" type="{{ a.type }}" href="{{ a.href }}" title="{{ a.title }}">
+  {%- endfor %}
+  {%- endif %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" aria-label="Primary">
+    <a href="/" class="logo-group" aria-label="{{ site.name }} home">
+      <span class="logo-mark" aria-hidden="true">{% include "logo.njk" %}</span>
+      <span class="logotype">{{ site.name }}</span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
+    <div class="nav-links" id="nav-links">
+      {%- for item in site.nav %}
+      <a href="{{ item.url }}"
+         {%- if item.newTab %} target="_blank" rel="noopener"{% endif %}
+         {%- if page.url.startsWith(item.url) and item.url != '/' %} aria-current="page"{% endif %}>{{ item.text }}{% if item.newTab %} <span class="ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span>{% endif %}</a>
+      {%- endfor %}
+      <a href="{{ site.repo }}" class="nav-cta" target="_blank" rel="noopener">GitHub <span class="ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+    </div>
+  </nav>
+
+  <main id="main" tabindex="-1">
+    {{ content | safe }}
+  </main>
+
+  <footer class="site-foot">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <span class="logo-mark small" aria-hidden="true">{% include "logo.njk" %}</span>
+        <span>{{ site.name }} — {{ site.tagline }}. <abbr title="Hypermedia-Driven AI">HYpermedia DRiven AI</abbr>.</span>
+      </div>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="/docs/">Docs</a>
+        <a href="/ns/agent">Vocabulary</a>
+        <a href="/agent/" target="_blank" rel="noopener">Agent demo <span class="ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+        <a href="{{ site.discussions }}" target="_blank" rel="noopener">Discussions <span class="ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+        <a href="{{ site.repo }}" target="_blank" rel="noopener">GitHub <span class="ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+      </nav>
+      <p class="foot-fine">
+        A community effort. HydrAI {{ site.version }} — early, under active development. Vocabulary:
+        <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a> · Reference code: MIT.
+        © {{ buildYear }}.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle — the only script on the marketing pages.
+    (function () {
+      var t = document.querySelector('.nav-toggle');
+      if (!t) return;
+      t.addEventListener('click', function () {
+        var open = document.body.classList.toggle('nav-open');
+        t.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</body>
+</html>

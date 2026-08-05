@@ -1,0 +1,86 @@
+{#
+  Shared body for a published vocabulary partition. The caller sets `v` to a source model from
+  `vocab.*` (e.g. `{% set v = vocab.agent %}`) and includes this. Rendered through base.njk, so nav,
+  footer, and accessibility match the rest of the site. Everything here is generated from the `.ttl`
+  source via site/_data/vocab.js — never hand-written.
+#}
+{% from "termref.njk" import termCard, shapeCard %}
+
+{%- set rdfaPrefix %}{% for pair in v.prefixes %}{{ pair[0] }}: {{ pair[1] }} {% endfor %}{% endset -%}
+<div class="wrap vocab-doc" prefix="{{ rdfaPrefix | trim }}" about="{{ v.ontology.iri }}" typeof="owl:Ontology">
+  <meta property="owl:versionInfo" content="{{ v.ontology.version }}">
+  {% if v.ontology.license %}<link property="dcterms:license" href="{{ v.ontology.license }}">{% endif %}
+  <p class="pill"><span class="pill-dot" aria-hidden="true"></span> Namespace document · {{ v.partition }} · version {{ v.ontology.version }}</p>
+  <h1 property="dcterms:title">{{ v.ontology.title }}</h1>
+  <p class="lede" property="rdfs:comment">{{ v.ontology.comment }}</p>
+
+  {% if v.layer == 'stewardship' %}
+  <div class="note warn"><strong>Use canonical <code>hydra:</code> IRIs over the wire.</strong> This partition is a formal equivalence backbone that makes “HydrAI&nbsp;⊇&nbsp;Hydra” provable — it is <em>not</em> a wire vocabulary. A HydrAI-described API keeps emitting canonical <code>hydra:</code> IRIs, so pure-Hydra clients keep working; the curated context is what makes the surface read as one vocabulary. Never emit <code>hcore:</code> on the wire.</div>
+  {% endif %}
+
+  <p class="alt-links">
+    This is the <strong>HTML</strong> representation (with embedded RDFa + JSON-LD). Machine-readable alternates:
+    <a href="/ns/{{ v.slug }}.ttl" rel="alternate" type="text/turtle">Turtle</a>
+    <a href="/ns/{{ v.slug }}.jsonld" rel="alternate" type="application/ld+json">JSON-LD</a>
+  </p>
+
+  <p class="partition-nav">Partitions:
+    {%- for s in vocab.sources %}
+    <a href="/ns/{{ s.slug }}"{% if s.slug == v.slug %} aria-current="page"{% endif %}><code>{{ s.slug }}#</code></a>{% if not loop.last %} ·{% endif %}
+    {%- endfor %}
+  </p>
+
+  <div class="vocab-meta card">
+    <p><strong>Namespace IRI</strong> &nbsp;<code>{{ v.source.namespace }}</code></p>
+    <p><strong>Suggested prefixes</strong></p>
+    <table>
+      <tbody>
+        {%- for pair in v.prefixes %}
+        <tr><td><code>{{ pair[0] }}:</code></td><td><code>{{ pair[1] }}</code></td></tr>
+        {%- endfor %}
+      </tbody>
+    </table>
+    {% if v.ontology.license %}<p><strong>License</strong> &nbsp;<a href="{{ v.ontology.license }}">{{ v.ontology.license }}</a></p>{% endif %}
+  </div>
+
+  {% if v.groups.classes.length %}
+  <h2 id="classes">Classes</h2>
+  {% for t in v.groups.classes %}{{ termCard(t, 3) }}{% endfor %}
+  {% endif %}
+
+  {% if v.groups.objectProperties.length %}
+  <h2 id="object-properties">Object properties</h2>
+  {% for t in v.groups.objectProperties %}{{ termCard(t, 3) }}{% endfor %}
+  {% endif %}
+
+  {% if v.groups.datatypeProperties.length %}
+  <h2 id="datatype-properties">Datatype properties</h2>
+  {% for t in v.groups.datatypeProperties %}{{ termCard(t, 3) }}{% endfor %}
+  {% endif %}
+
+  {% if v.groups.properties.length %}
+  <h2 id="properties">Properties</h2>
+  {% for t in v.groups.properties %}{{ termCard(t, 3) }}{% endfor %}
+  {% endif %}
+
+  {% if v.groups.individuals.length %}
+  <h2 id="individuals">Named individuals</h2>
+  {% for t in v.groups.individuals %}{{ termCard(t, 3) }}{% endfor %}
+  {% endif %}
+
+  {% if v.groups.shapes.length %}
+  <h2 id="shapes">Shapes</h2>
+  {% for s in v.groups.shapes %}{{ shapeCard(s, 3) }}{% endfor %}
+  {% endif %}
+
+  <p class="vocab-foot-note">
+    Generated at build time from <a href="/vocab/{{ v.slug }}.ttl"><code>{{ v.slug }}.ttl</code></a> —
+    this page is never hand-edited. HydrAI is {{ site.version }} and evolving; term IRIs are stable,
+    the vocabulary version is not.
+  </p>
+</div>
+
+<!-- The full graph inline, so a machine that parses this HTML still gets the RDF without negotiation. -->
+<script type="application/ld+json">
+{{ v.jsonldString | safe }}
+</script>

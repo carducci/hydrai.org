@@ -1,0 +1,239 @@
+---
+layout: base.njk
+title: false
+description: HydrAI is an opinionated companion vocabulary that makes a Hydra/JSON-LD API legible and safe for LLM agents — Hydra for the age of agents.
+---
+
+<section class="hero wrap">
+  <span class="pill"><span class="pill-dot"></span> Version {{ site.version }} · early, under active development</span>
+  <h1>Hydra for the<br><span class="grad">age of agents</span></h1>
+  <p class="hero-expand"><strong>Hydr<span class="grad">AI</span></strong> — <abbr title="Hypermedia-Driven AI"><span class="hl">Hy</span>permedia <span class="hl">Dr</span>iven <span class="hl">AI</span></abbr></p>
+  <p class="lede">
+    HydrAI is an opinionated companion vocabulary that makes a
+    <a href="https://www.hydra-cg.com/">Hydra</a>/JSON-LD API legible and safe for LLM agents —
+    a conservative superset of Hydra core, with a generic client and MCP server as the reference
+    implementation.
+  </p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="/agent/" target="_blank" rel="noopener">Open the agent demo <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+    <a class="btn btn-ghost" href="/docs/">Read the docs</a>
+    <a class="btn btn-ghost" href="/ns/agent">Browse the vocabulary</a>
+  </div>
+  <p class="hero-oneliner">
+    <strong>In one line:</strong> Hydra was designed for machines that <em>navigate</em>. Agents
+    <em>reason in examples</em> and <em>plan and act</em>. HydrAI is one vocabulary you can learn in an
+    afternoon instead of a dozen you have to assemble yourself.
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<!-- The bigger picture / thesis -->
+<section class="section wrap">
+  <div class="section-head">
+    <span class="eyebrow">The bigger picture</span>
+    <h2>Meaning doesn't have to stop with your data</h2>
+    <p>Semantically grounded data is essential for safe, cost-effective, accurate AI. HydrAI is the last mile of that idea — extending the semantic layer from your data to the surface an agent acts through.</p>
+  </div>
+  <blockquote class="pull">
+    There is no mechanism in an LLM's architecture for truth — only probability. Whole classes of AI
+    problems will not be solved by a bigger model, only by better data.
+  </blockquote>
+  <div class="grid cols-3">
+    <div class="thesis-step">
+      <span class="step-n" aria-hidden="true">1</span>
+      <h3>Ground the data</h3>
+      <p>JSON-LD turns magic strings into terms with identity — a semantic layer over the APIs you already have, additive and non-breaking. Every term a doorway down to bedrock.</p>
+    </div>
+    <div class="thesis-step">
+      <span class="step-n" aria-hidden="true">2</span>
+      <h3>Describe the surface</h3>
+      <p>Meaning doesn't stop at data. Hydra describes an API's affordances — what an agent can do and where it can go — carried in the responses themselves.</p>
+    </div>
+    <div class="thesis-step">
+      <span class="step-n" aria-hidden="true">3</span>
+      <h3>Hand agents a web</h3>
+      <p>A generic agent connects with one fact — the entry-point URL — and discovers the rest. No prompt, no custom tooling. Self-describing interoperability: a web for agents.</p>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:1.8rem;"><a href="/docs/vision/">Where HydrAI fits →</a></p>
+</section>
+
+<div class="divider"></div>
+
+<!-- Why -->
+<section class="section wrap">
+  <div class="section-head">
+    <span class="eyebrow">Why it exists</span>
+    <h2>The agent arrived after the spec did</h2>
+    <p>
+      Hydra is a beautiful piece of work built for generic hypermedia clients. An LLM agent is a
+      different consumer with two needs Hydra never had to serve.
+    </p>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <span class="card-ic">◆</span>
+      <h3>It learns from examples</h3>
+      <p>
+        Few-shot is how an agent orients. It wants a greeting and worked queries as data it can
+        consume — not prose comments. Hydra carries neither.
+      </p>
+    </div>
+    <div class="card">
+      <span class="card-ic">▶</span>
+      <h3>It plans and acts</h3>
+      <p>
+        Before firing an operation, an agent wants to know whether it is reversible, expensive, or
+        idempotent. Hydra describes an operation's method, input, and output — and stops.
+      </p>
+    </div>
+  </div>
+  <p class="lede" style="margin: 2rem auto 0; text-align:center;">
+    These are not bugs in Hydra. They are a generational mismatch. The
+    <a href="https://www.hydra-cg.com/">Hydra Community Group</a> is dormant, so HydrAI picks up the
+    torch — <strong>stewarding Hydra core</strong> unchanged and <strong>adding the agentic last
+    mile</strong> on top.
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<!-- Pillars -->
+<section class="section wrap">
+  <div class="section-head">
+    <span class="eyebrow">What you get</span>
+    <h2>A companion, not a replacement</h2>
+    <p>One place to learn the whole agent-friendly hypermedia surface — and it stays domain-agnostic. HydrAI describes how to <em>interact</em> with an API, never what your API is <em>about</em>; your entities keep their own vocabulary.</p>
+  </div>
+  <div class="grid cols-4">
+    <div class="card">
+      <span class="card-ic">⟚</span>
+      <h3>Hydra-compatible</h3>
+      <p>Every HydrAI document is a valid Hydra document. Additive and degradable by design.</p>
+    </div>
+    <div class="card">
+      <span class="card-ic">☺</span>
+      <h3>Agent-native</h3>
+      <p>Greeting, example queries, and action semantics — the affordances agents actually need.</p>
+    </div>
+    <div class="card">
+      <span class="card-ic">❋</span>
+      <h3>One vocabulary</h3>
+      <p>A curated <code>@context</code> hides Hydra, SHACL, and VoID behind one legible surface.</p>
+    </div>
+    <div class="card">
+      <span class="card-ic">⛨</span>
+      <h3>Untrusted by default</h3>
+      <p>All server content is data, never commands. A proof upgrades attribution, not authority.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- A taste of the vocabulary -->
+<section class="section wrap">
+  <div class="split">
+    <div class="prose">
+      <span class="eyebrow" style="color:var(--accent);font-weight:600;">A taste</span>
+      <h2>Terms an agent can actually use</h2>
+      <p>
+        A <strong>greeting</strong> — identity and stance in a few sentences, capped by a SHACL shape
+        in the vocabulary itself so it stays a greeting, not a manual.
+      </p>
+      <p>
+        A worked <strong>example query</strong> — an <em>(intent, query, endpoint)</em> tuple the
+        agent learns from. Executable, so a client never runs it verbatim: it is a candidate routed
+        through the client's own query gates.
+      </p>
+      <p><a href="/ns/agent">See the full 0.1 vocabulary →</a></p>
+    </div>
+    <div>
+      <div class="code-sample">
+        <div class="code-label">turtle · a greeting, self-capped</div>
+<pre><code>hydrai:greeting a owl:DatatypeProperty ;
+    rdfs:comment "Who this API is and its
+      cross-cutting conventions. Orientation,
+      not documentation." .
+
+hydrai:GreetingShape a sh:NodeShape ;
+    sh:targetSubjectsOf hydrai:greeting ;
+    sh:property [ sh:path hydrai:greeting ;
+      sh:maxLength 500 ; sh:maxCount 1 ] .</code></pre>
+      </div>
+      <div class="code-sample">
+        <div class="code-label">turtle · a worked example</div>
+<pre><code>[] a hydrai:ExampleQuery ;
+    hydrai:intent "Contacts created this quarter" ;
+    hydrai:queryText "SELECT ?c WHERE { … }" ;
+    hydrai:overEndpoint &lt;…/sparql&gt; .</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- The opinions -->
+<section class="section wrap">
+  <div class="section-head">
+    <span class="eyebrow">Our opinions</span>
+    <h2>The stances baked into the vocabulary</h2>
+    <p>Where the standards leave a choice, HydrAI makes one, states why, and proves it in working code.</p>
+  </div>
+  <div class="opinions">
+    <div class="opinion"><div><h3>A hypermedia API is a UI for agents</h3><p>The web gave humans one browser and delivered every site's capability as content. Give agents the same — driving a generic client, capability carried by the API's responses, not bespoke per-API tools.</p></div></div>
+    <div class="opinion"><div><h3>Mint only at the gap; reuse everything else</h3><p>A term enters HydrAI only when no standard says it and a real client already needs it. Every term carries a “why not the existing thing.”</p></div></div>
+    <div class="opinion"><div><h3>Learn one vocabulary, not a dozen</h3><p>A single curated context maps friendly terms to the canonical IRIs of Hydra, SHACL, VoID, and HydrAI's own additions.</p></div></div>
+    <div class="opinion"><div><h3>Steward the orphans; reference the living</h3><p>HydrAI mirrors dormant Hydra via equivalence axioms; it merely references the vocabularies that are still maintained.</p></div></div>
+    <div class="opinion"><div><h3>Refuse, don't warn</h3><p>Invalid input is rejected with an honest error, not silently coerced. A constraint that can be ignored is not a constraint.</p></div></div>
+    <div class="opinion"><div><h3>Untrusted by default; signing is authenticity, not authority</h3><p>Even a signed greeting is data, never a command. Executable examples run only through the client's own gates.</p></div></div>
+  </div>
+  <p style="text-align:center;margin-top:1.6rem;"><a href="/docs/opinions/">All nine opinions →</a></p>
+</section>
+
+<div class="divider"></div>
+
+<!-- Reference implementation -->
+<section class="section wrap">
+  <div class="section-head">
+    <span class="eyebrow">The reference implementation is the conformance proof</span>
+    <h2>Not a committee draft — a working thing</h2>
+    <p>This repository is the monorepo: the vocabulary, this site, and the example tools that consume it.</p>
+  </div>
+  <div class="grid cols-3">
+    <a class="card" href="/agent/" target="_blank" rel="noopener">
+      <span class="card-ic" aria-hidden="true">⌘</span>
+      <h3>The generic agent — demo <span aria-hidden="true">↗</span><span class="sr-only">(opens in a new tab)</span></h3>
+      <p>A generic Hydra/JSON-LD client with an agent loop. Everything it knows about an API it learns at runtime. Hosted here, runs in your browser.</p>
+    </a>
+    <a class="card" href="/docs/mcp/">
+      <span class="card-ic">⇄</span>
+      <h3>The MCP server →</h3>
+      <p>The same runtime, embedded as a Model Context Protocol server. Drive any conformant Hydra API from Claude Code, Claude Desktop, or any MCP client.</p>
+    </a>
+    <a class="card" href="/ns/agent">
+      <span class="card-ic">❋</span>
+      <h3>The vocabulary →</h3>
+      <p>Published at a neutral namespace in HTML, Turtle, and JSON-LD. Every term is a doorway into the standard behind it.</p>
+    </a>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta-band">
+  <div class="wrap">
+    <h2>This is a community effort</h2>
+    <p>
+      HydrAI is picking up dormant community work; it aims to <em>become</em> community work. Issues,
+      counter-examples, and “why not standard X instead” are exactly the contributions that make it
+      better. Come argue with us.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="{{ site.discussions }}" target="_blank" rel="noopener">Join the discussion <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+      <a class="btn btn-ghost" href="{{ site.repo }}" target="_blank" rel="noopener">View on GitHub <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+      <a class="btn btn-ghost" href="/docs/">Start with the docs</a>
+    </div>
+  </div>
+</section>

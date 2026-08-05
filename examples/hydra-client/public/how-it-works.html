@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How This Works &#8212; Hydra Agent</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f1117;
+    --bg2: #1a1d27;
+    --bg3: #22263a;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8eaf0;
+    --text2: #8b90a8;
+    --text3: #555a72;
+    --purple: #7c6fe0;
+    --purple2: #5a4fb8;
+    --green: #1d9e75;
+    --red: #d85a30;
+    --amber: #ba7517;
+    --mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  html, body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.7; }
+
+  .page { max-width: 760px; margin: 0 auto; padding: 0 24px 100px; }
+
+  /* Nav */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0 0; margin-bottom: 64px;
+    border-bottom: 1px solid var(--border); padding-bottom: 22px;
+  }
+  .nav-back {
+    font-size: 13px; color: var(--text2); text-decoration: none;
+    display: flex; align-items: center; gap: 6px; transition: color 0.15s;
+  }
+  .nav-back:hover { color: var(--text); }
+  .nav-badge { font-size: 11px; color: var(--text3); font-family: var(--mono); letter-spacing: 0.04em; }
+
+  /* Hero */
+  .hero { margin-bottom: 80px; }
+  .hero-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--purple); font-weight: 600; margin-bottom: 18px;
+  }
+  h1 {
+    font-size: clamp(28px, 5vw, 46px); font-weight: 700; line-height: 1.12;
+    letter-spacing: -0.02em; color: var(--text); margin-bottom: 24px;
+  }
+  .hero-sub { font-size: 18px; color: var(--text2); line-height: 1.7; max-width: 640px; }
+
+  /* Sections */
+  .section { margin-bottom: 72px; }
+  h2 {
+    font-size: 22px; font-weight: 600; letter-spacing: -0.01em;
+    color: var(--text); margin-bottom: 20px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  p { font-size: 15px; color: var(--text2); margin-bottom: 18px; line-height: 1.8; }
+  p strong { color: var(--text); font-weight: 600; }
+  p:last-child { margin-bottom: 0; }
+
+  /* Inline links */
+  .section a, .callout a {
+    color: var(--purple);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(124,111,224,0.3);
+    transition: border-color 0.15s;
+  }
+  .section a:hover, .callout a:hover { border-bottom-color: var(--purple); }
+
+  /* Callout */
+  .callout {
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-left: 3px solid var(--purple); border-radius: 8px;
+    padding: 20px 24px; margin: 28px 0;
+  }
+  .callout p { color: var(--text); font-size: 15px; margin-bottom: 0; }
+  .callout p + p { margin-top: 10px; color: var(--text2); font-size: 14px; }
+
+  /* Code */
+  code {
+    font-family: var(--mono); font-size: 12px; background: var(--bg3);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 2px 6px; color: var(--purple);
+  }
+
+  /* Comparison */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+  .compare-col {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px;
+  }
+  .compare-col.good { border-color: rgba(29,158,117,0.3); }
+  .compare-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+    font-weight: 700; margin-bottom: 14px; color: var(--text3);
+  }
+  .compare-col.good .compare-label { color: var(--green); }
+  .compare-item {
+    font-size: 13px; color: var(--text2); padding: 7px 0;
+    border-bottom: 1px solid var(--border); line-height: 1.5;
+  }
+  .compare-item:last-child { border: none; padding-bottom: 0; }
+  .compare-col.bad .compare-item::before { content: '✗  '; color: var(--red); }
+  .compare-col.good .compare-item::before { content: '✓  '; color: var(--green); }
+
+  /* Standards */
+  .standards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 28px 0; }
+  .standard {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+    transition: border-color 0.15s;
+  }
+  .standard:hover { border-color: var(--border2); }
+  .standard a { text-decoration: none; border: none !important; display: block; }
+  .standard-name { font-size: 13px; font-weight: 600; color: var(--text); font-family: var(--mono); margin-bottom: 4px; transition: color 0.15s; }
+  .standard:hover .standard-name { color: var(--purple); }
+  .standard-desc { font-size: 12px; color: var(--text3); line-height: 1.55; }
+  .standard-badge {
+    font-size: 10px; color: var(--green); text-transform: uppercase;
+    letter-spacing: 0.08em; font-weight: 600; margin-top: 8px;
+  }
+
+  /* Steps */
+  .steps { display: flex; flex-direction: column; gap: 24px; margin: 28px 0; }
+  .step { display: grid; grid-template-columns: 30px 1fr; gap: 18px; align-items: flex-start; }
+  .step-num {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--bg3); border: 1px solid var(--purple);
+    color: var(--purple); font-size: 12px; font-weight: 700;
+    font-family: var(--mono); display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; margin-top: 2px;
+  }
+  /* :first-child, not any descendant — the title is the block; emphasis inside the body text below
+     it must stay inline, or a bolded phrase mid-sentence breaks onto a line of its own. */
+  .step-body > strong:first-child { display: block; color: var(--text); font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .step-body strong { color: var(--text); font-weight: 600; }
+  .step-body p { font-size: 14px; margin: 0; color: var(--text2); line-height: 1.7; }
+
+  /* Tier ladder — same rhythm as the steps, but a rung is a state rather than a sequence */
+  .tier-row { display: grid; grid-template-columns: 38px 1fr; gap: 18px; align-items: flex-start; }
+  .tier-badge {
+    width: 38px; height: 26px; border-radius: 6px;
+    background: var(--bg3); border: 1px solid var(--purple);
+    color: var(--purple); font-size: 11px; font-weight: 700;
+    font-family: var(--mono); display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; margin-top: 2px;
+  }
+  .tier-badge.floor { border-color: var(--green); color: var(--green); }
+
+  /* Problems */
+  .problems { display: flex; flex-direction: column; gap: 10px; margin: 28px 0; }
+  .problem-item {
+    display: grid; grid-template-columns: 18px 1fr; gap: 14px;
+    align-items: flex-start; padding: 14px 16px;
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  }
+  .problem-check { color: var(--green); font-size: 13px; margin-top: 2px; flex-shrink: 0; }
+  .problem-body { font-size: 14px; line-height: 1.65; color: var(--text2); }
+  .problem-body strong { color: var(--text); font-weight: 600; }
+  .problem-body > strong:first-child { display: block; margin-bottom: 3px; font-size: 13px; }
+
+  /* CTA */
+  .cta-block {
+    margin-top: 80px; padding: 48px 40px; background: var(--bg2);
+    border: 1px solid var(--border2); border-radius: 12px; text-align: center;
+  }
+  .cta-block h2 { border: none; padding: 0; margin-bottom: 12px; font-size: 20px; }
+  .cta-block p { margin-bottom: 28px; font-size: 15px; }
+  .cta-btn {
+    display: inline-block; background: var(--purple); color: white;
+    text-decoration: none; border: none !important; border-radius: 8px; padding: 11px 28px;
+    font-size: 14px; font-weight: 500; transition: background 0.15s;
+  }
+  .cta-btn:hover { background: var(--purple2); border: none !important; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav">
+    <a class="nav-back" href="index.html">&#8592; Back to demo</a>
+    <span class="nav-badge">Hydra &middot; JSON-LD &middot; RDF &middot; SHACL</span>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-label">How This Works</div>
+    <h1>The AI that discovered your API.<br>Not the one that was told about it.</h1>
+    <p class="hero-sub">
+      Every enterprise AI integration today secretly bottoms out at the same thing: a human encoding API knowledge into a bespoke connector that will drift, break, and need to be rewritten. This demo is built on a fundamentally different premise... and the difference matters enormously.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>The integration tax everyone is paying</h2>
+    <p>
+      The standard playbook for connecting AI to enterprise software goes like this: write a custom <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">MCP</a> server, or define function-calling tools by hand; hardcoded field names, hardcoded URLs, handwritten descriptions the model will try to interpret. Do that for every API you want the agent to reach.
+    </p>
+    <p>
+      The model only knows what you told it at build time. When the API changes, the agent breaks silently... or worse, hallucinates confidently about endpoints that no longer exist. Each connector is an island. The agent can't reason across systems because there's no shared vocabulary connecting them. And nothing about this approach scales: <strong>every new API is another bespoke connector to write, maintain, and keep synchronized with whatever knowledge is buried in the model's context.</strong>
+    </p>
+    <p>
+      This is the integration tax. Every enterprise AI project pays it. Most teams have simply accepted it as the cost of doing business with AI.
+    </p>
+
+    <div class="compare">
+      <div class="compare-col bad">
+        <div class="compare-label">Traditional / MCP / function-calling</div>
+        <div class="compare-item">Human encodes API knowledge at build time</div>
+        <div class="compare-item">Custom connector per API, per vendor</div>
+        <div class="compare-item">Hardcoded URLs, field names, auth flows</div>
+        <div class="compare-item">Model reasons over raw HTTP details</div>
+        <div class="compare-item">Documentation drifts from implementation</div>
+        <div class="compare-item">Breaking changes require agent redeployment</div>
+        <div class="compare-item">Model hallucinates stale or invented field names</div>
+        <div class="compare-item">Each system is an isolated island</div>
+      </div>
+      <div class="compare-col good">
+        <div class="compare-label">Hydra / semantic hypermedia approach</div>
+        <div class="compare-item">API declares its own capabilities at runtime</div>
+        <div class="compare-item">One universal client, any compliant API</div>
+        <div class="compare-item">All of that discovered live! Nothing hardcoded</div>
+        <div class="compare-item">Model sees only a semantic capability manifest</div>
+        <div class="compare-item">Vocab IS the implementation. Drift is impossible</div>
+        <div class="compare-item">New capabilities auto-discoverable on next connect</div>
+        <div class="compare-item">Model can only reference fields the API declares</div>
+        <div class="compare-item">Linked Data IRIs connect systems as one graph</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>A different premise: the API describes itself</h2>
+    <p>
+      <strong>What if the API told the agent what it could do?</strong> Not in a README no agent can parse but in a machine-readable vocabulary, served live at a discoverable URL, that a generic client can consume and act on with zero prior knowledge of that specific API.
+    </p>
+    <p>
+      This is exactly what <strong><a href="https://www.hydra-cg.com/" target="_blank" rel="noopener">Hydra</a></strong> is: a <a href="https://www.w3.org/" target="_blank" rel="noopener">W3C</a> community vocabulary for self-describing Web APIs. Using <a href="https://json-ld.org/" target="_blank" rel="noopener">JSON-LD</a>, a Hydra-compliant API publishes an <a href="https://www.hydra-cg.com/spec/latest/core/#supported-classes" target="_blank" rel="noopener"><code>ApiDocumentation</code></a> that declares the resource types it manages, the HTTP operations supported on each, the properties of those resources (with readable, writable, and required flags and semantic IRIs), and structured URL templates for filtered queries. The API is its own documentation, and that documentation is machine-readable by design and, more importantly, natively <em>machine-understandable.</em> <strong>This is the true secret sauce, <em>semantics</em>, not syntax.</strong>
+    </p>
+
+    <div class="callout">
+      <p>These aren't new ideas invented for AI. They are established <a href="https://www.w3.org/" target="_blank" rel="noopener">W3C</a> and <a href="https://www.ietf.org/" target="_blank" rel="noopener">IETF</a> standards, built over two decades to give machines enough context to act on information without a human in the loop to interpret it. The insight here is applying them as the native interface layer for autonomous AI agents.</p>
+      <p>The semantic web was built for exactly this moment.</p>
+    </div>
+
+    <div class="standards">
+      <div class="standard">
+        <a href="https://www.hydra-cg.com/spec/latest/core/" target="_blank" rel="noopener">
+          <div class="standard-name">Hydra Core</div>
+          <div class="standard-desc">Self-describing API vocabulary &#8212; supported operations, properties, collections, IriTemplates, and API entry points</div>
+          <div class="standard-badge">W3C Community Group Spec</div>
+        </a>
+      </div>
+      <div class="standard">
+        <a href="https://json-ld.org/" target="_blank" rel="noopener">
+          <div class="standard-name">JSON-LD</div>
+          <div class="standard-desc">Linked Data in JSON &#8212; every value carries a globally unique, unambiguous semantic meaning via IRIs</div>
+          <div class="standard-badge">W3C Recommendation 2014</div>
+        </a>
+      </div>
+      <div class="standard">
+        <a href="https://schema.org/" target="_blank" rel="noopener">
+          <div class="standard-name">schema.org</div>
+          <div class="standard-desc">Shared vocabulary for common real-world concepts &#8212; names, addresses, dates, events, organizations</div>
+          <div class="standard-badge">Google &middot; Bing &middot; Yahoo &middot; Yandex</div>
+        </a>
+      </div>
+      <div class="standard">
+        <a href="https://www.rfc-editor.org/rfc/rfc6570" target="_blank" rel="noopener">
+          <div class="standard-name">RFC 6570 URI Templates</div>
+          <div class="standard-desc">Machine-readable URL patterns with named, typed variables &#8212; no URL construction by the model, ever</div>
+          <div class="standard-badge">IETF Standard 2012</div>
+        </a>
+      </div>
+      <div class="standard">
+        <a href="https://www.w3.org/TR/shacl/" target="_blank" rel="noopener">
+          <div class="standard-name">SHACL</div>
+          <div class="standard-desc">Shapes Constraint Language &#8212; machine-readable data validation rules, not just prose that a model has to interpret</div>
+          <div class="standard-badge">W3C Recommendation 2017</div>
+        </a>
+      </div>
+      <div class="standard">
+        <a href="https://www.w3.org/TR/owl2-overview/" target="_blank" rel="noopener">
+          <div class="standard-name">OWL / RDF</div>
+          <div class="standard-desc">Ontologies and RDF/semantic linked graphs &#8212; formally describes relationships between concepts, within and across systems</div>
+          <div class="standard-badge">W3C Recommendation 2004</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What happens when you click Connect</h2>
+    <p>
+      The Hydra client in this demo is a <strong>deterministic hypermedia runtime</strong>. The language model never sees an HTTP method or an authorization header, and never constructs a URL &#8212; it can't exfiltrate your token, and the addresses it uses are ones the API's own documents handed it, copied and never composed. It holds a small set of constant controls &#8212; follow, search, read, invoke, query &#8212; and everything this API can do arrives as <em>content</em>: a collection index rendered into its instructions at connect, and the affordances each result carries. The model browses; it does not memorise a surface. Here is exactly what happens:
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Follow the one address you gave it</strong>
+          <p>You supply a single URL: the API entry point. The client fetches it and reads the response's <a href="https://www.w3.org/wiki/LinkHeader" target="_blank" rel="noopener">Link header</a>, where the server advertises where its <a href="https://www.hydra-cg.com/spec/latest/core/#supported-classes" target="_blank" rel="noopener"><code>ApiDocumentation</code></a> lives. <strong>It does not append <code>/Vocab</code> to anything.</strong> That distinction is the whole hypermedia principle in one step: if the server moved its vocabulary tomorrow, the client would follow it there without a change, because it never knew the old address either. Serve that header from a path nothing could guess and the client still finds it; remove the header and it refuses to guess, by name, rather than silently probing.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Read everything that was pointed at</strong>
+          <p>The vocabulary declares every resource type, every supported operation with its expected and returned types, every property with read/write/required flags, and <a href="https://www.rfc-editor.org/rfc/rfc6570" target="_blank" rel="noopener">IriTemplates</a> for filtered queries. From there the client follows further pointers the same way: to the <a href="https://www.w3.org/TR/shacl/" target="_blank" rel="noopener">SHACL</a> shapes graph, to each <code>@context</code> document, to a <a href="https://www.w3.org/TR/sparql11-query/" target="_blank" rel="noopener">SPARQL</a> endpoint if one is advertised. Everything retrieved is parsed into <strong>one RDF graph</strong> and nothing above that layer ever sees JSON again. Two documents spelling the same term differently, one compact and one expanded, land on the same node.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Build the capability model by querying the graph</strong>
+          <p>Classes, operations, properties, templates, collections and their member types are read <em>out of the graph</em> rather than walked as a JSON tree, then joined to the SHACL property shapes on the RDF predicate IRI. Reading it as data is what makes the answer independent of how the server chose to serialise it. Against this API that comes out as 27 classes, 10 collections, 38 operations and 22 templates &#8212; none of it configured anywhere.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Project it into an affordance registry, behind a constant browser</strong>
+          <p>Each declared operation and template becomes a registry record &#8212; a stable handle, an input contract generated from the SHACL constraints, the vocabulary's own prose carried verbatim (the paragraph explaining that PUT replaces rather than merges is exactly what stops a model mangling an update). The model itself holds five constant tools, identical for every Hydra API: <code>follow</code>, <code>search_collection</code>, <code>get_resource</code>, <code>invoke</code>, <code>sparql</code>. Capability scales in what the results say, not in how many tools exist &#8212; a vocabulary of any size projects the same controls. <strong>The registry and the index are the only things the model ever sees about the API.</strong> Not HTTP methods. Not auth headers. The index does carry one thing that looks like a URL &#8212; each collection's resolved address &#8212; but as a value to copy, never a pattern to fill in, and the model still composes none of its own. That same index names every write the API declares, each labelled by what it does (<code>POST</code> creates, <code>PUT</code> replaces, <code>DELETE</code> deletes), and states plainly that it is complete: browsing never turns up a capability the index did not already list, so &#8220;can this API do X?&#8221; is answered by reading, not by probing. Point the client at a different Hydra API and the affordances change with no code change, which is a claim the test suite checks against a vocabulary for an API that does not exist.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <strong>The model browses; it does not write a plan</strong>
+          <p>Your message goes to the model with the constant controls attached and the collection index in its instructions, and it calls tools directly through the provider's native tool-use protocol &#8212; no intermediate plan format invented on top of one that already exists. The controls divide the work by how much they promise: <code>follow</code> reads a single page and states honestly how much of the collection it left behind; <code>search_collection</code> is the deliberate one, traversing a filtered set to its end; and a count or a total is never read off a listing but sent to <code>sparql</code>, which answers where the data is whole and returns only the number. Every result ends with the affordances of what it holds: the write operations it can invoke (as handles with their contracts), the filters the collection declares, pagination state. A listing teaches the filter that would have avoided it; a resource offers its own edit. Never raw HTTP. Never a URL it constructed. And because the controls are constant, no affordance is ever deferred, truncated, or silently dropped &#8212; discovery cannot fail.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <strong>Client executes deterministically &#8212; and refuses before it spends a request</strong>
+          <p>Each call becomes real HTTP: <a href="https://www.rfc-editor.org/rfc/rfc6570" target="_blank" rel="noopener">RFC 6570</a> templates expanded, <a href="https://www.hydra-cg.com/spec/latest/core/#hydra-Link" target="_blank" rel="noopener"><code>hydra:Link</code></a> references resolved through their declared <code>range</code>, and &#8212; when the call asked for the whole set rather than a single-page <code>follow</code> &#8212; <a href="https://www.hydra-cg.com/spec/latest/core/#hydra-next" target="_blank" rel="noopener"><code>hydra:next</code></a> followed to the end of the collection with no page ceiling. Any published constraint the tool schema could not carry is checked here first, and a value that violates one is refused with the constraint quoted and <strong>no request issued at all</strong>. A write reads the current representation from the origin first, always &#8212; a replacement built from a cached copy silently reverts every field someone else changed in the meantime.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <strong>Verify, don't narrate</strong>
+          <p>After every update the client compares what the server echoed back against what was sent, statement by statement in the graph rather than key by key &#8212; so a server that stored your value under a differently spelled name is still seen to have kept it, and one that quietly dropped it is still seen to have dropped it. A <code>200 OK</code> is not proof anything stuck. The agent's job is to tell you what actually happened, not what it expected to happen.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What your API publishes decides what the agent can do</h2>
+    <p>
+      Almost no API publishes all four documents on day one, and a client that demanded them all would prove nothing portable. So this one <strong>detects what is actually there, tells you which rung you are on, and degrades at a named layer</strong> rather than either failing or quietly doing less. Connect it to your own API and the badge in the sidebar is a roadmap: it says what you publish today, and what publishing the next document would buy you.
+    </p>
+
+    <div class="steps">
+      <div class="tier-row">
+        <div class="tier-badge floor">T0</div>
+        <div class="step-body">
+          <strong>Vocabulary only &#8212; the floor, and it has to work</strong>
+          <p>Operations, HTTP methods, required fields, declared status codes and the API's own descriptions. That alone is enough to project a working toolset and act on it. Everything above this rung makes the agent more precise; nothing above it is needed to make it <em>function</em>.</p>
+        </div>
+      </div>
+      <div class="tier-row">
+        <div class="tier-badge">T1</div>
+        <div class="step-body">
+          <strong>+ a valid JSON-LD <code>@context</code> &#8212; keys stop being guesses</strong>
+          <p>Payload keys resolve to IRIs, including nested ones, so the client knows what a field <em>means</em> rather than what it is spelled. Note the word valid: a context that is served but malformed buys no tier at all, because no conformant processor can expand anything that references it. Reachable is not the same as usable, and the client will tell you which one you have.</p>
+        </div>
+      </div>
+      <div class="tier-row">
+        <div class="tier-badge">T2</div>
+        <div class="step-body">
+          <strong>+ a SHACL shapes graph &#8212; constraints become enforceable</strong>
+          <p>Datatypes, formats, and value sets that reach the affordance contracts the model reads &#8212; and where a property points at a class a read-only reference collection serves in full, the collection's live members become the value set, enforced before dispatch. Every published constraint is checked at the gate before a request is spent, and a violation is refused with the constraint quoted. This is the rung where a bad write stops costing you a request.</p>
+        </div>
+      </div>
+      <div class="tier-row">
+        <div class="tier-badge">T3</div>
+        <div class="step-body">
+          <strong>+ an ontology and a reachable SPARQL endpoint &#8212; reasoning and server-side analytics</strong>
+          <p>Subclass closure, and aggregate questions answered by the endpoint over the whole dataset instead of locally over what was fetched. <em>Reachable</em> is doing real work in that sentence: an advertised endpoint is a claim, so the client probes it and believes the probe. And reachable is not the same as synchronised: an endpoint that answers but holds a different count than the API declares is <em>stale</em>, and rather than trust a mirror that has drifted the client falls through to the complete local path &#8212; the divergence recorded as provenance on the answer, so the reader can see which dataset replied. This deployment has advertised an endpoint that was live and one that was dead without changing the advertisement.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Analytics do not wait for T3.</strong> Ask &#8220;how much did I make last year&#8221; against an API with no SPARQL endpoint at all and the client works out which collections the question is scoped to &#8212; through the declared member types, never by guessing from names &#8212; fetches them completely, and runs the query locally over the graph it built.</p>
+      <p>Two rules make that answer trustworthy rather than merely fast. <strong>Every term in the query must be one the API declares</strong>, checked before anything executes: an invented predicate against a live endpoint does not error, it returns zero rows, and a confident wrong total is worse than a refusal. And <strong>an aggregate runs only over a set proved complete</strong> &#8212; every page fetched, and every field it touches one the collection actually serves. Otherwise it declines and says what is missing. A sum over most of your data is not a smaller answer; it is a wrong one.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What this actually eliminates</h2>
+    <p>This isn't an incremental improvement on bespoke connectors. It's a different category of solution. Here's what it eliminates:</p>
+
+    <div class="problems">
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>No per-API integration code</strong>
+          One universal client works against any <a href="https://www.hydra-cg.com/" target="_blank" rel="noopener">Hydra</a>-compliant API. Add a new enterprise system? Connect the client. No connector to write, no tool definitions to author, no agent to redeploy. This is simple to layer on existing REST APIs without breaking clients.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>Documentation drift is structurally impossible</strong>
+          The API generates its vocabulary from its own implementation; from the same types, the same properties, the same routes. There is no separate documentation layer to fall out of sync. What the model reasons over is exactly what the server enforces.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>No URL hallucination</strong>
+          The model never constructs a URL. It doesn't need to. The client owns every address &#8212; discovered live from the vocabulary and entry point &#8212; and translates semantic intentions into real HTTP completely invisibly; where a collection's address does reach the model through the index, it is a value to hand straight back, never a template to fill in. The model cannot hallucinate an endpoint because it is never asked to produce one.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>No field hallucination</strong>
+          The affordance contracts are generated from the live API. Every field name, required flag, and data type the model reasons over comes from the API itself, at runtime, and a field the vocabulary does not declare is not merely discouraged &#8212; the dispatch gate refuses it before any request is issued. There is no stale training knowledge to override.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>Self-describing search: no custom query logic</strong>
+          Free-text search, field-level filtering, combined queries are all expressed as <a href="https://www.rfc-editor.org/rfc/rfc6570" target="_blank" rel="noopener">RFC 6570</a> IriTemplates in the vocabulary. The model sees exactly what query patterns are valid, what variables they accept, and which ones bind to <a href="https://www.hydra-cg.com/spec/latest/core/#hydra-freetextQuery" target="_blank" rel="noopener"><code>hydra:freetextQuery</code></a> for relevance-ranked results. No per-API query syntax to document or learn. A binding has to be an IRI to carry that meaning &#8212; where a template variable is published as a plain string it names nothing, and the client reports precisely that rather than inferring the variable's purpose from its spelling.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>Pagination is hypermedia, not arithmetic</strong>
+          The client follows <a href="https://www.hydra-cg.com/spec/latest/core/#hydra-next" target="_blank" rel="noopener"><code>hydra:next</code></a> links declared in each response; the semantically correct way to traverse a collection. No URL pattern assumptions. No page-number math baked into the agent. No page ceiling either &#8212; a cap would hand you 250 of 3,000 records as though that were the answer. The server controls how its collections are navigated, and where a collection stops linking without declaring a pagination route, that is reported as a gap in the API rather than papered over with a guessed address.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>Machine-readable constraints via <a href="https://www.w3.org/TR/shacl/" target="_blank" rel="noopener">SHACL</a></strong>
+          The API publishes a SHACL shapes graph: not prose describing what's valid, but a formal, deterministic, executable specification of data constraints. It is projected into the affordance contracts the model reads, and the whole of it &#8212; types, enums, string patterns, length bounds, constraints on nested objects &#8212; is enforced by the client's dispatch gate before any request is issued: a violation quotes the published constraint and <strong>issues no HTTP request</strong>. A constraint the client cannot evaluate is disclosed as unchecked; it is never counted as satisfied. The same shapes drive the write path itself: outgoing payloads are framed and compacted against the server's own served <code>@context</code>, so wire keys are correct by construction.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>Relational references resolved from the ontology, not guessed</strong>
+          When a field links to another resource, the vocab declares it as a <a href="https://www.hydra-cg.com/spec/latest/core/#hydra-Link" target="_blank" rel="noopener"><code>hydra:Link</code></a> with a formal <code>range</code> derived from the <a href="https://www.w3.org/TR/owl2-overview/" target="_blank" rel="noopener">OWL</a> ontology at the point the vocabulary is generated. The client resolves the reference by traversing that declared relationship. It never guesses from field names, string patterns or English morphology &#8212; a collection is matched to its member type through the declared range, never by singularising its name. Where the range is missing, the client does not quietly drop the field: it says which property is undeclared, what publishing the range would unlock, and which routes remain open in the meantime.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>Cross-system references via <a href="https://www.w3.org/standards/semanticweb/data" target="_blank" rel="noopener">Linked Data</a> IRIs</strong>
+          Every resource has a globally unique IRI. Relationships between resources and between different systems are first-class typed links, not opaque foreign keys buried in a silo. An agent can traverse from a contact to a company to an event across system boundaries by following the same <a href="https://www.w3.org/standards/semanticweb/data" target="_blank" rel="noopener">Linked Data</a> graph, the way a browser follows hyperlinks across domains. Different systems may have different terms or properties but the standards enable semantic alignment rather than syntactic mappings.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>Gaps in the contract are reported, never worked around</strong>
+          Where the API describes something incompletely, the client will not invent the missing half. It names what is undeclared, says what publishing it would unlock, and tells the model which routes are still open so the task can finish by another path. Those findings accumulate as a machine-readable conformance report about <em>your</em> API &#8212; the exact list of things to publish next, generated by the client that went looking. Silently dropping the field is the failure mode this replaces: the user asked for something, and it did not happen, and nothing said so.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>New capabilities are instantly discoverable</strong>
+          When the API adds a new resource type, a new operation, or a new field, the agent discovers it on the next connect. No agent update. No retraining. No prompt engineering. No deployment. The API vocabulary change is the entire release.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">&#10003;</div>
+        <div class="problem-body">
+          <strong>Not model-specific, not vendor-specific</strong>
+          The HydraClient is a standalone runtime; the page you are looking at is one surface built on it, not the artifact itself. Any model that can call tools can use it &#8212; and the model selector in the sidebar exists so you can prove that: swap to the smallest model available and watch the same task complete, because the capability lives in the schemas and the gates rather than in the model's recall. Any Hydra-compliant API can serve it. No lock-in to a specific LLM provider, no dependency on a specific cloud vendor's connector marketplace. It is the interface, not the implementation.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The bigger vision</h2>
+    <p>
+      This demo is a proof of concept for a specific claim: <strong>a standards-based semantic layer can be the native interface between AI agents and enterprise software.</strong> Not bespoke connectors. Not per-API tool definitions curated and maintained by hand. A uniform, self-describing, machine-readable contract that any compliant API can publish and any compliant client can discover and act on automatically.
+    </p>
+    <p>
+      The implications go further than a single API. <a href="https://www.hydra-cg.com/" target="_blank" rel="noopener">Hydra</a>'s <a href="https://www.w3.org/standards/semanticweb/data" target="_blank" rel="noopener">Linked Data</a> foundation means that connections between systems aren't point-to-point integrations, they're edges in a graph. A contact who works at a company that has booked an event isn't three separate silos requiring three separate connectors. It's a traversable subgraph. An agent reasoning over it can follow those typed links across system boundaries, the same way a browser follows hyperlinks across domains; declaratively, without prior knowledge of the topology.
+    </p>
+    <p>
+      <strong>This is the architecture for enterprise AI that actually scales.</strong> Not more connectors. Not bigger context windows stuffed with API documentation. A semantic layer that lets agents discover and operate on enterprise data the way the Web lets humans navigate information through structure, through links, through self-describing resources that carry their own meaning.
+    </p>
+    <p>
+      <a href="https://www.hydra-cg.com/" target="_blank" rel="noopener">Hydra</a> covers what REST clients need. <strong>HydrAI</strong> &#8212;a proposed extension to the Hydra vocabulary &#8212;adds what autonomous agents specifically need: formal affordances for agentic action, constraint declarations for plan validation before execution, and cross-system traversal primitives for multi-hop reasoning across enterprise graphs. Every HydrAI document is a valid Hydra document. Existing clients need no modification.
+    </p>
+    <p>
+      Every design decision in this implementation (the ontology-driven link ranges, the <a href="https://www.w3.org/TR/shacl/" target="_blank" rel="noopener">SHACL</a> shapes graph, the reconciliation tests that make vocab drift a build failure, the <a href="https://www.rfc-editor.org/rfc/rfc6570" target="_blank" rel="noopener">IriTemplates</a> for self-describing search, the PUT verification loop that catches silent server failures) reflects a single principle: <strong>the API should be smart enough that the agent doesn't have to be.</strong>
+    </p>
+    <p>
+      The enterprise software industry has been shipping integration complexity for decades. AI doesn't change that. Semantics do.
+    </p>
+  </div>
+
+  <div class="cta-block">
+    <h2>See it for yourself</h2>
+    <p>Connect the agent to a Hydra-compliant API and watch it discover capabilities, plan multi-step actions, and execute, with no bespoke integration code of any kind.</p>
+    <a class="cta-btn" href="index.html">&#8592; Back to the demo</a>
+  </div>
+
+</div>
+</body>
+</html>

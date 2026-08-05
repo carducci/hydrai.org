@@ -1,0 +1,20 @@
+---
+layout: base.njk
+---
+<div class="docs">
+  <aside class="docs-side" aria-label="Documentation navigation">
+    {%- for group in docsNav %}
+    <div class="side-group">
+      <div class="side-title">{{ group.title }}</div>
+      {%- for link in group.links %}
+      <a href="{{ link.url }}"{% if page.url == link.url %} class="active"{% endif %}>{{ link.text }}</a>
+      {%- endfor %}
+    </div>
+    {%- endfor %}
+  </aside>
+  <article class="docs-main">
+    <div class="prose">
+      {{ content | safe }}
+    </div>
+  </article>
+</div>
