@@ -12,7 +12,8 @@ Downstream carries a small, stable set of repo-specific adaptations — nothing 
 | File | Adaptation | Why |
 | --- | --- | --- |
 | `vite.config.ts` | outputs to `./dist`, `emptyOutDir: true`, `base: './'` | published to `/agent` on hydrai.org, not into a .NET web app |
-| `index.html` | HydrAI branding | this is the hosted public demo |
+| `index.html` | HydrAI branding + domain-neutral demo copy | this is the hosted public demo, not the Mago-embedded one |
+| `src/ui/connection-form.ts` | `defaultEntrypoint` returns `''` (was `window.location.origin + '/Api/'`) | hydrai.org has no same-origin API; the standalone demo is "bring your own API" |
 | `public/how-it-works.html` | present here | was a hand-edited sibling of the old build dir |
 | `package.json` | name/scripts unchanged; dependencies mirror upstream | workspace member; root lockfile governs |
 | `test/layout.test.ts` | asserts the `dist/` contract instead of the old `AIPlayground` one | the build target changed |
@@ -36,10 +37,11 @@ DN="examples/hydra-client"
 # 1. Overwrite the pristine directories (everything except the adapted files).
 for d in src mcp tools test; do cp -rf "$UP/$d/." "$DN/$d/"; done
 
-# 2. Re-apply the two in-tree adaptations that live inside those dirs / at root.
-#    - test/layout.test.ts  (keep THIS repo's version — asserts the dist/ contract)
-#    - index.html           (keep HydrAI branding)
-git checkout -- "$DN/test/layout.test.ts" "$DN/index.html"
+# 2. Re-apply the in-tree adaptations that live inside those dirs / at root.
+#    - test/layout.test.ts       (keep THIS repo's version — asserts the dist/ contract)
+#    - index.html                (keep HydrAI branding + domain-neutral demo copy)
+#    - src/ui/connection-form.ts (keep the empty defaultEntrypoint — no same-origin API here)
+git checkout -- "$DN/test/layout.test.ts" "$DN/index.html" "$DN/src/ui/connection-form.ts"
 
 # 3. Reconcile dependencies: diff upstream package.json against ours and copy any
 #    added/removed deps or devDeps across. Do NOT copy scripts or name.

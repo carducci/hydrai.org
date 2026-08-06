@@ -43,10 +43,13 @@ function storage(): Storage | null {
 
 export function mountConnectionForm(els: ConnectionFormElements): ConnectionForm {
   /**
-   * A default for the field the operator can edit, not a URL the client discovers anything from. The
-   * entrypoint is the one address a generic client has to be told; everything past it is discovered.
+   * The entrypoint is the one address a generic client has to be told; everything past it is
+   * discovered. On the standalone hydrai.org demo there is no same-origin API to assume, so the field
+   * starts empty and the placeholder guides the operator to paste their own — this is a "bring your
+   * own API" demo. (An embed served from an API's own origin can restore a `window.location.origin`
+   * default; see UPSTREAM.md.)
    */
-  const defaultEntrypoint = () => `${window.location.origin}/Api/`
+  const defaultEntrypoint = () => ''
 
   const store = storage()
 
