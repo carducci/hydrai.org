@@ -11,7 +11,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "report": "vite-node tools/conformance-report.ts",
-    "mcp": "vite-node mcp/index.ts"
+    "mcp": "vite-node mcp/index.ts",
+    "sync": "node sync-upstream.mjs",
+    "sync:check": "node sync-upstream.mjs --check"
   },
   "devDependencies": {
     "@rdfjs/types": "^2.0.1",

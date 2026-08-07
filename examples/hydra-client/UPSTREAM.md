@@ -26,36 +26,43 @@ dependencies (`marked`, `dompurify`) and a dev dependency (`jsdom`). **Dependenc
 source.** A sync that only copies `src/` will miss `package.json` changes and produce a build that
 fails to install or typecheck. The re-sync procedure below always reconciles `package.json`.
 
-## Re-sync procedure (upstream → here)
+## Staying in sync: the sync tool
 
-Run from the repo root. `$UP` is the upstream client directory.
+`sync-upstream.mjs` makes syncing one command. It mirrors every upstream file **except** the
+adaptations in the table above, reconciles `package.json` dependencies (never scripts or name), never
+deletes (downstream-only files are reported for you to judge), and normalizes line endings so git's
+normalization never shows as false drift.
+
+Point it at the upstream with `HYDRA_UPSTREAM` (so no personal path lives in this public repo). Set it
+once in your shell profile and the commands get short:
 
 ```bash
-UP="/path/to/MagoTech/src/Web/HydraClient"
-DN="examples/hydra-client"
-
-# 1. Overwrite the pristine directories (everything except the adapted files).
-for d in src mcp tools test; do cp -rf "$UP/$d/." "$DN/$d/"; done
-
-# 2. Re-apply the in-tree adaptations that live inside those dirs / at root.
-#    - test/layout.test.ts       (keep THIS repo's version — asserts the dist/ contract)
-#    - index.html                (keep HydrAI branding + domain-neutral demo copy)
-#    - src/ui/connection-form.ts (keep the empty defaultEntrypoint — no same-origin API here)
-git checkout -- "$DN/test/layout.test.ts" "$DN/index.html" "$DN/src/ui/connection-form.ts"
-
-# 3. Reconcile dependencies: diff upstream package.json against ours and copy any
-#    added/removed deps or devDeps across. Do NOT copy scripts or name.
-diff <(sed -n '/"dependencies"/,/}/p' "$UP/package.json") \
-     <(sed -n '/"dependencies"/,/}/p' "$DN/package.json")
-
-# 4. Reinstall + verify.
-npm install
-npm run build:agent
-npm test --workspace hydra-client
+export HYDRA_UPSTREAM=/mnt/c/Mago/MagoTech/MagoTech/src/Web/HydraClient   # your MagoTech checkout, master
 ```
 
-The suite is the acceptance gate: if it is green after a sync, the copy is faithful. CI
-(`.github/workflows/ci.yml`) runs it on every push, so a bad sync fails the PR.
+From `examples/hydra-client/`:
+
+```bash
+npm run sync:check   # am I behind? exit 1 = drift (safe: changes nothing)
+npm run sync         # pull upstream in — protects adaptations, reconciles deps
+```
+
+Then, from the repo root, verify and commit:
+
+```bash
+npm install && npm run build && npm test
+```
+
+The test suite is the acceptance gate: green after a sync means the copy is faithful. CI
+(`.github/workflows/ci.yml`) runs the build + both suites on every push, so a bad sync fails the PR.
+
+**Make drift impossible to forget.** `sync:check` is cheap and exits non-zero on drift, so wire it into
+whatever you already run:
+- run it before cutting a hydrai.org release/deploy;
+- or add it to the **MagoTech** repo's `.githooks/pre-push` (guarded to fire only when
+  `src/Web/HydraClient` changed) so pushing a client change in mago reminds you to sync hydrai.
+Because the upstream is a private repo the public CI can't reach, this local check is the enforcement
+point — there is no server-side substitute until one of the durable options below lands.
 
 ## The durable options (pick one when this gets painful)
 
