@@ -1,7 +1,7 @@
 ---
 layout: doc.njk
 title: exampleQuery
-description: The HydrAI exampleQuery term — a worked (intent, query, endpoint) tuple an agent can learn from.
+description: The HydrAI exampleQuery term, a worked (intent, query, endpoint) tuple an agent can learn from.
 ---
 {% from "termref.njk" import termCard, shapeCard %}
 
@@ -39,13 +39,13 @@ Few-shot is how an agent orients. `exampleQuery` is the hypermedia-native way to
 
 ## Executable content is never run verbatim
 
-An `exampleQuery` is **executable**, and that is exactly why a consumer never runs it as-is. It is a *candidate* routed through the consumer's own query gates and executed only under the consumer's own authority. The `ExampleQueryShape` above is **coarse, defence-in-depth** structural validation — it requires a read verb, forbids the obvious mutation keywords, caps length, and types the endpoint.
+An `exampleQuery` is **executable**, and that is exactly why a consumer never runs it as-is. It is a *candidate* routed through the consumer's own query gates and executed only under the consumer's own authority. The `ExampleQueryShape` above is **coarse, defence-in-depth** structural validation: it requires a read verb, forbids the obvious mutation keywords, caps length, and types the endpoint.
 
-<div class="note warn"><strong>The shape does not make a query safe.</strong> SPARQL is not a regular language, and a read-only query can still exfiltrate via <code>SERVICE</code> federation. Safety is enforced at <em>execution</em>, in the client's query containment — not by the shape. The shape is a coarse filter; the execution gate is the real wall. See the <a href="/docs/safety/">safety posture</a>.</div>
+<div class="note warn"><strong>The shape does not make a query safe.</strong> SPARQL is not a regular language, and a read-only query can still exfiltrate via <code>SERVICE</code> federation. Safety is enforced at <em>execution</em>, in the client's query containment, not by the shape. The shape is a coarse filter; the execution gate is the real wall. See the <a href="/docs/safety/">safety posture</a>.</div>
 
 ## Bound semantics
 
-The one thing core Hydra genuinely cannot say about a template variable — that two variables are the ends of a *range* over one property — is expressed with `lowerBoundOf` / `upperBoundOf` (harvest pending):
+The one thing core Hydra genuinely cannot say about a template variable (that two variables are the ends of a *range* over one property) is expressed with `lowerBoundOf` / `upperBoundOf` (harvest pending):
 
 ```turtle
 [] hydrai:lowerBoundOf schema:dateCreated .   # ?from  →  ?d >= ?from

@@ -1,19 +1,19 @@
 # HydrAI
 
-**A one-stop-shop vocabulary for domain-agnostic, agent-friendly hypermedia APIs — with a reference implementation.**
+**A one-stop-shop vocabulary for domain-agnostic, agent-friendly hypermedia APIs, with a reference implementation.**
 
 [`hydrai.org`](https://hydrai.org/) · version **0.1** · status: **early, under active development** · a community effort
 
 HydrAI makes a [Hydra](https://www.hydra-cg.com/)/JSON-LD API legible and safe for LLM agents. It is a
-*conservative superset* of Hydra core — everything Hydra can express, plus the handful of things an
-agent needs that Hydra does not — presented as **one vocabulary you can learn in an afternoon**
+*conservative superset* of Hydra core: everything Hydra can express, plus the handful of things an
+agent needs that Hydra does not. It arrives as **one vocabulary you can learn in an afternoon**
 instead of a dozen you have to assemble yourself. It describes *how to interact* with an API, never
-what a particular API is about, so it stays domain-agnostic: your entities keep their own vocabulary
+what a particular API is about, so it stays domain-agnostic; your entities keep their own vocabulary
 and ride in on your API's own context.
 
 This repository is the HydrAI monorepo: the **vocabulary**, the **site** at
-[hydrai.org](https://hydrai.org/), and the **example tools** — a generic Hydra client that is both a
-hosted browser agent and an MCP server.
+[hydrai.org](https://hydrai.org/), and the **example tools** (a generic Hydra client that is both a
+hosted browser agent and an MCP server).
 
 > **In one line:** Hydra was designed for machines that *navigate*. Agents *reason in examples* and
 > *plan and act*. HydrAI is Hydra for the agent generation. The name is a portmanteau of
@@ -64,12 +64,12 @@ client, not designed in advance and hoped into use.
 The namespace is partitioned by **who governs each term**, so it can never sprawl back into the
 dozen-vocabulary problem it exists to solve.
 
-- **[`ns/agent#`](https://hydrai.org/ns/agent)** — *invention.* The agentic terms HydrAI owns
-  outright, minted only at the gap (a `greeting`, `exampleQuery` and friends). Authored in
+- **[`ns/agent#`](https://hydrai.org/ns/agent)** (*invention*). The agentic terms HydrAI owns
+  outright, minted only at the gap (a `greeting`, `exampleQuery`, and friends). Authored in
   `vocab/agent.ttl`.
-- **[`ns/core#`](https://hydrai.org/ns/core)** — *stewardship.* The dormant Hydra Core Vocabulary,
+- **[`ns/core#`](https://hydrai.org/ns/core)** (*stewardship*). The dormant Hydra Core Vocabulary,
   mirrored via one `owl:equivalent*` axiom per term so "HydrAI ⊇ Hydra" is provable. **A formal
-  backbone, not a wire vocabulary — emit canonical `hydra:` IRIs over the wire.** Generated into
+  backbone, not a wire vocabulary; emit canonical `hydra:` IRIs over the wire.** Generated into
   `vocab/core.ttl`.
 
 VoID, SHACL, JSON-LD, and schema.org are *referenced*, never mirrored. The curated `@context`
@@ -79,7 +79,7 @@ flattens it all into one friendly set of terms.
 
 `GET /ns/agent` is the dereference target for every `…#term` IRI, but Azure Static Web Apps cannot
 content-negotiate on `Accept`. So each partition is published as three pre-generated representations
-at stable URLs — HTML (the browsable default), `.ttl`, and `.jsonld` — and the alternates are
+at stable URLs: HTML (the browsable default), `.ttl`, and `.jsonld`. The alternates are
 advertised **four** ways so a machine agent can always recover the RDF:
 
 1. `<link rel="alternate">` in the HTML `<head>`;
@@ -90,16 +90,16 @@ advertised **four** ways so a machine agent can always recover the RDF:
    `.jsonld` MIME mappings.
 
 Everything the site and the machine representations show is generated from the `.ttl` sources at build
-time — there is no hand-written prose that can drift from the ontology.
+time, so no hand-written prose can drift from the ontology.
 
 ---
 
 ## The reference tools
 
-- **[The generic agent](https://hydrai.org/agent/)** (`examples/hydra-client/`) — a generic
+- **[The generic agent](https://hydrai.org/agent/)** (`examples/hydra-client/`): a generic
   Hydra/JSON-LD client with an agent loop. Everything it knows about an API it learns at runtime; there
   is no vendor hostname, namespace, or term anywhere in `src/`. Hosted, runs entirely in your browser.
-- **[The MCP server](https://hydrai.org/docs/mcp/)** (`examples/hydra-client/mcp/`) — the same
+- **[The MCP server](https://hydrai.org/docs/mcp/)** (`examples/hydra-client/mcp/`): the same
   runtime, embedded as a Model Context Protocol server, so any MCP client can drive any conformant
   Hydra API.
 
@@ -130,14 +130,14 @@ CI (`.github/workflows/ci.yml`) runs the full build and both test suites on ever
 
 ## Deployment
 
-Deploys to **Azure Static Web Apps** — app location `/`, output location `_site`, build command
+Deploys to **Azure Static Web Apps**: app location `/`, output location `_site`, build command
 `npm run build`. `staticwebapp.config.json` carries the MIME types, `Link` headers, and routing.
 
 ---
 
 ## License & governance
 
-- **Namespace:** `hydrai.org` — deliberately neutral, so no single vendor owns the vocabulary the
+- **Namespace:** `hydrai.org`, deliberately neutral, so no single vendor owns the vocabulary the
   community is asked to adopt.
 - **Vocabulary:** [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/). **Reference code:** MIT.
 - **Feedback is the point.** HydrAI is picking up dormant community work; it aims to *become*

@@ -10,11 +10,11 @@ There are three ways in, from least to most setup.
 
 ## 1. Use the hosted agent
 
-The [generic agent](/agent/) runs entirely in your browser. Point it at any conformant Hydra API entry point, paste an API token if the API needs one, and give it your Anthropic API key (it calls the model directly from your browser — nothing is proxied through this site).
+The [generic agent](/agent/) runs entirely in your browser. Point it at any conformant Hydra API entry point, paste an API token if the API needs one, and give it your Anthropic API key (it calls the model directly from your browser; nothing is proxied through this site).
 
-The agent learns everything it knows about the API at runtime from the documents that API publishes. There is no vendor hostname, namespace, or term baked into it. When the API advertises HydrAI orientation terms — a `greeting`, some `exampleQuery` seeds — the agent folds them into its prompt, **fail-closed**: an unverified greeting is quarantined as untrusted data, and example queries are offered as candidates routed through the client's query gates, never auto-executed.
+The agent learns everything it knows about the API at runtime from the documents that API publishes. There is no vendor hostname, namespace, or term baked into it. When the API advertises HydrAI orientation terms (a `greeting`, some `exampleQuery` seeds), the agent folds them into its prompt, **fail-closed**: an unverified greeting is quarantined as untrusted data, and example queries are offered as candidates routed through the client's query gates, never auto-executed.
 
-<div class="note"><strong>What “generic” means here.</strong> The agent drives a generic hypermedia client — a browser for machines — with five constant controls (<code>follow</code>, <code>search_collection</code>, <code>get_resource</code>, <code>invoke</code>, <code>sparql</code>), identical for every Hydra API. Capability arrives as content in the API's responses, not as a bespoke tool surface.</div>
+<div class="note"><strong>What “generic” means here.</strong> The agent drives a generic hypermedia client (a browser for machines) with five constant controls (<code>follow</code>, <code>search_collection</code>, <code>get_resource</code>, <code>invoke</code>, <code>sparql</code>), identical for every Hydra API. Capability arrives as content in the API's responses, not as a bespoke tool surface.</div>
 
 ## 2. Run the client and MCP server locally
 
@@ -36,10 +36,10 @@ It exposes six tools: `connect` (returns the affordance map plus a session handl
 
 ## 3. Make your own API HydrAI-ready
 
-You do not rewrite your API. You *add a few declarations* to what it already publishes:
+You *add a few declarations* to what your API already publishes; nothing gets rewritten:
 
-- a **greeting** on the entry point — identity and cross-cutting conventions, within the 500-character cap;
-- a handful of **example queries** — `(intent, queryText, overEndpoint)` tuples for common questions;
+- a **greeting** on the entry point: identity and cross-cutting conventions, within the 500-character cap;
+- a handful of **example queries**: `(intent, queryText, overEndpoint)` tuples for common questions;
 - consequence semantics on the risky operations, as those terms land.
 
 Everything expands through the curated `@context`, so `greeting`, `exampleQuery`, and `sparqlEndpoint` each resolve to the right vocabulary's canonical IRI. A HydrAI-described API is still a plain Hydra API: an agent that has never heard of HydrAI still works against it.

@@ -7,7 +7,7 @@ Hydra API before it is published here.
 - **Upstream (source of truth):** `MagoTech/src/Web/HydraClient` on the `master` branch.
 - **Downstream (this public repo):** `examples/hydra-client/`.
 
-Downstream carries a small, stable set of repo-specific adaptations — nothing else diverges:
+Downstream carries a small, stable set of repo-specific adaptations, and nothing else diverges:
 
 | File | Adaptation | Why |
 | --- | --- | --- |
@@ -21,7 +21,7 @@ Downstream carries a small, stable set of repo-specific adaptations — nothing 
 
 ## The drift risk, and why it's real
 
-Upstream evolves — the last sync brought in a Markdown-rendering feature that also added two runtime
+Upstream evolves; the last sync brought in a Markdown-rendering feature that also added two runtime
 dependencies (`marked`, `dompurify`) and a dev dependency (`jsdom`). **Dependencies drift, not just
 source.** A sync that only copies `src/` will miss `package.json` changes and produce a build that
 fails to install or typecheck. The re-sync procedure below always reconciles `package.json`.
@@ -62,22 +62,22 @@ whatever you already run:
 - or add it to the **MagoTech** repo's `.githooks/pre-push` (guarded to fire only when
   `src/Web/HydraClient` changed) so pushing a client change in mago reminds you to sync hydrai.
 Because the upstream is a private repo the public CI can't reach, this local check is the enforcement
-point — there is no server-side substitute until one of the durable options below lands.
+point; there is no server-side substitute until one of the durable options below lands.
 
 ## The durable options (pick one when this gets painful)
 
 Copy-and-reconcile is fine at the current cadence. When it stops being fine, in rough order of effort:
 
-1. **git subtree** — track `MagoTech/src/Web/HydraClient` as a subtree under `examples/hydra-client`
+1. **git subtree**: track `MagoTech/src/Web/HydraClient` as a subtree under `examples/hydra-client`
    and `git subtree pull` to bring updates in as real merges. Keeps history; needs the adaptations to
    live as commits on top (or as a tiny patch series) so a pull doesn't clobber them. Best fit if the
    two repos stay separate.
-2. **Extract the client to its own package** — publish the runtime from MagoTech as a versioned npm
+2. **Extract the client to its own package**: publish the runtime from MagoTech as a versioned npm
    package (e.g. `@hydrai/client`); this repo and MagoTech both depend on it, and the adaptations
    become build config, not forked files. The cleanest end state; the most up-front work.
-3. **Make this repo the source of truth** — invert the relationship: develop the client here (public,
+3. **Make this repo the source of truth**: invert the relationship: develop the client here (public,
    with the full test suite and CI already in place) and vendor it *into* MagoTech. Attractive because
-   the reference implementation *should* be the public one — but only once it can be exercised against
+   the reference implementation *should* be the public one; but only once it can be exercised against
    a live Hydra API from here.
 
 Recommendation: stay on copy-and-reconcile until the next sync feels tedious, then do (1) git subtree

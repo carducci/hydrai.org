@@ -1,7 +1,7 @@
 ---
 layout: doc.njk
 title: Safety posture
-description: HydrAI treats all server content as untrusted by default. A proof upgrades attribution, never authority — and query safety lives at execution.
+description: HydrAI treats all server content as untrusted by default. A proof upgrades attribution, never authority, and query safety lives at execution.
 ---
 
 # Safety posture
@@ -18,18 +18,18 @@ You cannot type your way to safety. Injection rides on ordinary data as easily a
 
 ## A proof is authenticity, not authority
 
-HydrAI anticipates verifiable content ([W3C Data Integrity](https://www.w3.org/TR/vc-data-integrity/), [HTTP Message Signatures](https://www.rfc-editor.org/rfc/rfc9421)). When a value carries a proof that verifies against a trust anchor, that upgrades exactly one thing: its **attribution** — you now know *who* said it. It never upgrades its **authority** — a signed greeting is still data, still never a command.
+HydrAI anticipates verifiable content ([W3C Data Integrity](https://www.w3.org/TR/vc-data-integrity/), [HTTP Message Signatures](https://www.rfc-editor.org/rfc/rfc9421)). When a value carries a proof that verifies against a trust anchor, that upgrades exactly one thing: its **attribution**: you now know *who* said it. It never upgrades its **authority**: a signed greeting is still data, still never a command.
 
-<div class="note">This distinction is the whole game. "Signed" answers <em>who said this</em>. It does not answer <em>should I do what it says</em> — the answer to that is always no, because a server never speaks with the client's authority.</div>
+<div class="note">"Signed" answers <em>who said this</em>. It does not answer <em>should I do what it says</em>; the answer to that is always no, because a server never speaks with the client's authority.</div>
 
 ## Where query safety actually lives
 
 The `ExampleQueryShape` is coarse, structural defence-in-depth: a read verb, no obvious mutation keyword, a length cap, a typed endpoint. It is not a safety guarantee and cannot be one:
 
-- SPARQL is not a regular language — a pattern cannot fully parse it.
+- SPARQL is not a regular language; a pattern cannot fully parse it.
 - A read-only query can still exfiltrate data via `SERVICE` federation to an attacker-controlled endpoint.
 
-So the real wall is **execution containment**, enforced by the client when it runs a query under its own authority — not by the shape when it validates one. The shape catches the careless; the execution gate stops the adversarial.
+So the real wall is **execution containment**, enforced by the client when it runs a query under its own authority, not by the shape when it validates one. The shape catches the careless; the execution gate stops the adversarial.
 
 ## Three layers
 

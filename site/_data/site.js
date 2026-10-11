@@ -9,14 +9,13 @@ export default {
   expansion: 'HYpermedia DRiven AI',
   description:
     'HydrAI is an opinionated companion vocabulary that makes a Hydra/JSON-LD API legible and safe ' +
-    'for LLM agents — a conservative superset of Hydra core, with a generic client and MCP server ' +
-    'as the reference implementation.',
+    'for LLM agents. It is a conservative superset of Hydra core, with a generic client and MCP ' +
+    'server as the reference implementation.',
   url: 'https://hydrai.org',
   repo,
   discussions: `${repo}/discussions`,
   // The broader semantic-layer thesis lives off this site; HydrAI only breadcrumbs to it.
-  // TODO(michael): confirm the canonical destination (semantic.consulting / the talk / the book).
-  bigPicture: 'https://semantic.consulting',
+  bigPicture: 'https://semantic.training',
   bigPictureLabel: 'the semantic-layer thesis',
   version: '0.1',
   nav: [

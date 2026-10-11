@@ -15,7 +15,7 @@
   <p class="lede" property="rdfs:comment">{{ v.ontology.comment }}</p>
 
   {% if v.layer == 'stewardship' %}
-  <div class="note warn"><strong>Use canonical <code>hydra:</code> IRIs over the wire.</strong> This partition is a formal equivalence backbone that makes “HydrAI&nbsp;⊇&nbsp;Hydra” provable — it is <em>not</em> a wire vocabulary. A HydrAI-described API keeps emitting canonical <code>hydra:</code> IRIs, so pure-Hydra clients keep working; the curated context is what makes the surface read as one vocabulary. Never emit <code>hcore:</code> on the wire.</div>
+  <div class="note warn"><strong>Use canonical <code>hydra:</code> IRIs over the wire.</strong> This partition is a formal equivalence backbone that makes “HydrAI&nbsp;⊇&nbsp;Hydra” provable; it is <em>not</em> a wire vocabulary. A HydrAI-described API keeps emitting canonical <code>hydra:</code> IRIs, so pure-Hydra clients keep working; the curated context is what makes the surface read as one vocabulary. Never emit <code>hcore:</code> on the wire.</div>
   {% endif %}
 
   <p class="alt-links">
@@ -74,7 +74,7 @@
   {% endif %}
 
   <p class="vocab-foot-note">
-    Generated at build time from <a href="/vocab/{{ v.slug }}.ttl"><code>{{ v.slug }}.ttl</code></a> —
+    Generated at build time from <a href="/vocab/{{ v.slug }}.ttl"><code>{{ v.slug }}.ttl</code></a>;
     this page is never hand-edited. HydrAI is {{ site.version }} and evolving; term IRIs are stable,
     the vocabulary version is not.
   </p>
